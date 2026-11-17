@@ -1,0 +1,3674 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>入党申请人结业考试刷题</title>
+<meta name="description" content="天津大学入党申请人培训结业考试选择题与填空题刷题程序，按题型与事件线分类标签，支持模拟试卷、即时刷题、分类练习与错题重练。">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+/* ============================================================
+   入党申请人结业考试刷题 · 样式
+   视觉方向：党校讲义与答题卡的世界 —— 冷调纸面、宋体标题、
+   批改朱红、铅笔填涂的方格。签名元素：右侧答题卡与填涂方格。
+   ============================================================ */
+
+:root {
+  --paper: #eff1ea;
+  --paper-2: #f7f8f2;
+  --card: #fbfcf7;
+  --ink: #1b221c;
+  --ink-2: #4c564a;
+  --ink-3: #7c857a;
+  --rule: #d2d6cb;
+  --rule-strong: #b7bdaf;
+  --red: #b03a2e;
+  --red-deep: #8a2b22;
+  --green: #2e6b50;
+  --amber: #9a6b22;
+  --blue: #2f5568;
+  --gold: #8a6a1f;
+  --shadow: 0 1px 0 rgba(27, 34, 28, 0.05), 0 14px 34px -26px rgba(27, 34, 28, 0.55);
+  --serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+[data-theme="dark"] {
+  --paper: #131711;
+  --paper-2: #191e18;
+  --card: #1d231c;
+  --ink: #e8ebe1;
+  --ink-2: #b0b9a9;
+  --ink-3: #828b7e;
+  --rule: #333a31;
+  --rule-strong: #4a5347;
+  --red: #e0705f;
+  --red-deep: #c25a4b;
+  --green: #7fbe9e;
+  --amber: #d3a456;
+  --blue: #93b8cb;
+  --gold: #d2b266;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 18px 36px -28px rgba(0, 0, 0, 0.9);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(90deg, rgba(120, 130, 110, 0.05) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(0deg, rgba(120, 130, 110, 0.035) 0 1px, transparent 1px 96px);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--ink); }
+button { font-family: inherit; }
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 28px 72px;
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px 24px;
+  padding: 18px 0 14px;
+  border-bottom: 1px solid var(--rule-strong);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand-kicker {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+.brand-title {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nav-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 13px;
+  padding: 7px 11px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+.nav-btn:hover { border-color: var(--rule-strong); color: var(--ink); }
+.nav-btn[aria-current="true"] {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--paper-2);
+  font-weight: 500;
+}
+.nav-btn.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper-2);
+  font-weight: 500;
+}
+.nav-btn.primary:hover { background: var(--red-deep); border-color: var(--red-deep); color: #fdfcf7; }
+
+/* ---------- 首页 ---------- */
+.cover {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 40px;
+  padding: 52px 0 42px;
+  align-items: start;
+}
+
+.cover-main { display: flex; flex-direction: column; gap: 22px; }
+
+.cover-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+}
+.cover-eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--red);
+}
+
+.cover-title {
+  font-family: var(--serif);
+  font-size: clamp(34px, 5vw, 56px);
+  font-weight: 900;
+  line-height: 1.16;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.cover-title em {
+  font-style: normal;
+  color: var(--red-deep);
+}
+
+.cover-sub {
+  max-width: 40ch;
+  color: var(--ink-2);
+  font-size: 14px;
+  margin: 0;
+}
+
+.cover-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  margin-top: 6px;
+}
+.stat {
+  flex: 1 1 0;
+  min-width: 96px;
+  padding: 14px 16px 12px;
+  border-right: 1px solid var(--rule);
+}
+.stat:last-child { border-right: 0; }
+.stat-num {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  display: block;
+}
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  display: block;
+  margin-top: 4px;
+}
+
+/* 印章：页脚式落款 */
+.seal-wrap { display: flex; justify-content: flex-end; padding-top: 8px; }
+.seal {
+  border: 2px solid var(--red-deep);
+  color: var(--red-deep);
+  padding: 12px 14px;
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.18em;
+  text-align: center;
+  transform: rotate(-2.5deg);
+  border-radius: 3px;
+  max-width: 132px;
+  opacity: 0.9;
+}
+
+/* 首页右侧：答题卡缩略 */
+.cover-side { display: flex; flex-direction: column; gap: 14px; }
+.side-note {
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+.mini-card {
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.mini-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.mini-card-head h3 {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  margin: 0;
+  font-weight: 700;
+}
+.mini-card-head span {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 5px;
+}
+.mini-cell {
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--rule);
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.mini-cell.hit { background: var(--ink); border-color: var(--ink); color: var(--paper-2); }
+.mini-cell.smudge { background: color-mix(in srgb, var(--ink) 18%, transparent); border-color: var(--rule-strong); }
+
+/* ---------- 模式选择 ---------- */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--rule-strong);
+  padding-top: 16px;
+  margin: 36px 0 18px;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+.section-note { font-size: 12px; color: var(--ink-3); margin: 0; }
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.mode-card {
+  text-align: left;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  padding: 20px 20px 18px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  box-shadow: var(--shadow);
+  border-radius: 2px;
+}
+.mode-card:hover {
+  border-color: var(--ink);
+  transform: translateY(-2px);
+}
+.mode-card:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+.mode-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.mode-name { font-family: var(--serif); font-size: 18px; font-weight: 700; letter-spacing: 0.06em; }
+.mode-mark { width: 22px; height: 22px; border: 1px solid var(--rule-strong); display: grid; place-items: center; }
+.mode-mark svg { width: 12px; height: 12px; }
+.mode-desc { display: block; font-size: 13px; color: var(--ink-2); margin: 0; min-height: 44px; }
+.mode-meta {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  border-top: 1px dashed var(--rule);
+  padding-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+.mode-card.off { opacity: 0.55; cursor: not-allowed; }
+.mode-card.off:hover { transform: none; border-color: var(--rule); }
+
+/* ---------- 标签分组 ---------- */
+.tag-groups { display: flex; flex-direction: column; }
+
+.tag-group-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0 18px;
+  border-bottom: 1px dashed var(--rule);
+}
+.tag-group-block:last-child { border-bottom: 0; }
+
+.tag-group-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.tag-group-name {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.tag-group-note { font-size: 11.5px; color: var(--ink-3); }
+
+.start-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--rule-strong);
+  background: var(--card);
+  padding: 16px 20px;
+  margin-top: 8px;
+  position: sticky;
+  bottom: 16px;
+  box-shadow: var(--shadow);
+  border-radius: 2px;
+}
+.start-info { font-size: 13px; color: var(--ink-2); }
+.start-info strong {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin: 0 2px;
+}
+
+.bar-name[data-tone="red"] { color: var(--red-deep); }
+.bar-name[data-tone="green"] { color: var(--green); }
+.bar-name[data-tone="amber"] { color: var(--amber); }
+.bar-name[data-tone="blue"] { color: var(--blue); }
+.bar-name[data-tone="crimson"] { color: var(--red); }
+.bar-name[data-tone="gold"] { color: var(--gold); }
+
+/* ---------- 通用按钮 ---------- */
+.btn {
+  appearance: none;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  color: var(--ink);
+  font-size: 13px;
+  padding: 9px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  min-height: 38px;
+}
+.btn:hover { border-color: var(--ink); }
+.btn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.btn-solid { background: var(--ink); border-color: var(--ink); color: var(--paper-2); font-weight: 500; }
+.btn-solid:hover { background: var(--red-deep); border-color: var(--red-deep); color: #fdfcf7; }
+.btn-ghost { background: transparent; border-color: transparent; color: var(--ink-2); }
+.btn-ghost:hover { border-color: var(--rule-strong); color: var(--ink); }
+.btn-sm { font-size: 12px; padding: 6px 10px; min-height: 30px; }
+.btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- 标签 ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  line-height: 1;
+  padding: 5px 8px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  color: var(--ink-2);
+  background: transparent;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.tag[data-tone="red"] { color: var(--red-deep); border-color: color-mix(in srgb, var(--red) 45%, transparent); }
+.tag[data-tone="green"] { color: var(--green); border-color: color-mix(in srgb, var(--green) 45%, transparent); }
+.tag[data-tone="amber"] { color: var(--amber); border-color: color-mix(in srgb, var(--amber) 45%, transparent); }
+.tag[data-tone="blue"] { color: var(--blue); border-color: color-mix(in srgb, var(--blue) 45%, transparent); }
+.tag[data-tone="crimson"] { color: var(--red); border-color: color-mix(in srgb, var(--red) 40%, transparent); }
+.tag[data-tone="gold"] { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+
+.tag.is-active { background: var(--ink); border-color: var(--ink); color: var(--paper-2); }
+
+.tag-button { cursor: pointer; }
+.tag-button:hover { border-color: var(--ink); }
+
+/* 题型徽标 */
+.type-badge {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  padding: 4px 8px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.type-badge.fill { border-color: var(--blue); color: var(--blue); }
+.type-badge.multi { border-color: var(--amber); color: var(--amber); }
+
+/* ---------- 答题视图 ---------- */
+.quiz-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 268px;
+  gap: 28px;
+  padding-top: 26px;
+  align-items: start;
+}
+
+.sheet {
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  box-shadow: var(--shadow);
+  padding: 26px 30px 22px;
+  position: relative;
+  border-radius: 2px;
+}
+.sheet::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in srgb, var(--red) 22%, transparent);
+}
+
+.sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.sheet-index {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--ink);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+.sheet-head .spacer { flex: 1 1 auto; }
+
+.stem {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.85;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0 0 22px;
+}
+.blankslot {
+  display: inline-block;
+  min-width: 46px;
+  border-bottom: 1px solid var(--ink);
+  text-align: center;
+  font-family: var(--sans);
+  font-weight: 400;
+}
+
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+
+.option {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease;
+  width: 100%;
+}
+.option:hover { border-color: var(--ink); background: var(--paper-2); }
+.option:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.option-marker {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--rule-strong);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-family: var(--serif);
+  color: var(--ink-2);
+  margin-top: 2px;
+  transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+}
+.option-text { font-size: 14.5px; line-height: 1.65; color: var(--ink); }
+
+.option.selected { border-color: var(--ink); background: var(--paper-2); }
+.option.selected .option-marker { background: var(--ink); border-color: var(--ink); color: var(--paper-2); }
+
+.option.correct { border-color: var(--green); background: color-mix(in srgb, var(--green) 9%, transparent); }
+.option.correct .option-marker { border-color: var(--green); color: var(--green); }
+.option.correct.selected .option-marker { background: var(--green); border-color: var(--green); color: var(--paper-2); }
+.option.wrong { border-color: var(--red); background: color-mix(in srgb, var(--red) 9%, transparent); }
+.option.wrong .option-marker { border-color: var(--red); color: var(--red); }
+.option.wrong.selected .option-marker { background: var(--red); border-color: var(--red); color: #fdfcf7; }
+.option.locked { cursor: default; }
+.option.locked:hover { background: transparent; border-color: var(--rule); }
+.option.locked.correct:hover { border-color: var(--green); }
+.option.locked.wrong:hover { border-color: var(--red); }
+
+/* 多选「漏选」：选对的绿、漏掉的琥珀、选错的红 */
+.option.missed {
+  border-color: var(--amber);
+  border-style: dashed;
+  background: color-mix(in srgb, var(--amber) 7%, transparent);
+}
+.option.missed .option-marker { border-color: var(--amber); color: var(--amber); }
+.option.locked.missed:hover { border-color: var(--amber); }
+.option-tag {
+  margin-left: auto;
+  flex: 0 0 auto;
+  align-self: center;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  padding: 1px 5px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.option-tag.part { color: var(--amber); }
+
+/* 填空输入 */
+.fill-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px; }
+.fill-row { display: flex; align-items: center; gap: 12px; }
+.fill-no {
+  flex: 0 0 26px;
+  font-family: var(--serif);
+  font-size: 12px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.fill-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  min-height: 44px;
+}
+.fill-input:focus { outline: 2px solid var(--red); outline-offset: 1px; border-color: var(--ink); }
+.fill-input.ok { border-color: var(--green); background: color-mix(in srgb, var(--green) 12%, var(--card)); }
+.fill-input.no { border-color: var(--red); background: color-mix(in srgb, var(--red) 12%, var(--card)); }
+/* 半对：整题部分正确时，错的空用琥珀，不是红 */
+.fill-input.half { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 9%, var(--card)); }
+.fill-input.gap { border-color: var(--amber); border-style: dashed; background: transparent; }
+.fill-flag.half { color: var(--amber); }
+.fill-input[readonly] { color: var(--ink-2); }
+.fill-flag {
+  flex: 0 0 34px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* 判定结果区 */
+.feedback {
+  border-top: 1px solid var(--rule);
+  margin-top: 18px;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.feedback-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.verdict {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.verdict.ok { color: var(--green); }
+.verdict.no { color: var(--red); }
+.verdict.part { color: var(--amber); }
+.answer-line { font-size: 13.5px; color: var(--ink); }
+.answer-line strong { font-family: var(--serif); letter-spacing: 0.06em; }
+.explain { font-size: 13px; color: var(--ink-2); line-height: 1.75; margin: 0; }
+.explain::before {
+  content: "解析";
+  font-family: var(--serif);
+  color: var(--red-deep);
+  margin-right: 8px;
+  letter-spacing: 0.08em;
+}
+
+.sheet-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid var(--rule);
+  margin-top: 22px;
+  padding-top: 16px;
+}
+.sheet-foot .spacer { flex: 1 1 auto; }
+
+/* ---------- 答题卡 ---------- */
+.card-sheet {
+  position: sticky;
+  top: 92px;
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow);
+  border-radius: 2px;
+}
+.card-sheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.card-sheet-head h2 {
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  margin: 0;
+  font-weight: 700;
+}
+.card-sheet-head .count {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.card-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.card-cell {
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-3);
+  font-size: 11px;
+  font-family: var(--sans);
+  font-variant-numeric: tabular-nums;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.card-cell:hover { border-color: var(--ink); color: var(--ink); }
+.card-cell.answered { border-color: var(--ink); color: var(--ink); background: color-mix(in srgb, var(--ink) 12%, transparent); }
+.card-cell.current { border-color: var(--red); box-shadow: inset 0 0 0 1px var(--red); color: var(--red-deep); }
+.card-cell.correct {
+  border-color: var(--green);
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 18%, transparent);
+  font-weight: 700;
+}
+.card-cell.partial {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 20%, transparent);
+  font-weight: 700;
+}
+.card-cell.wrong {
+  border-color: var(--red);
+  color: var(--red);
+  background: color-mix(in srgb, var(--red) 18%, transparent);
+  font-weight: 700;
+}
+.card-cell.dim { opacity: 0.45; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule);
+  font-size: 10.5px;
+  color: var(--ink-3);
+}
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i {
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--rule-strong);
+  display: inline-block;
+}
+.legend i.cur { border-color: var(--red); }
+.legend i.ans { background: color-mix(in srgb, var(--ink) 40%, transparent); border-color: var(--ink); }
+.legend i.ok { background: var(--green); border-color: var(--green); }
+.legend i.part { background: var(--amber); border-color: var(--amber); }
+.legend i.no { background: var(--red); border-color: var(--red); }
+.legend i.blank { background: transparent; }
+
+.card-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.card-progress {
+  height: 3px;
+  background: var(--rule);
+  margin-top: 12px;
+  overflow: hidden;
+}
+.card-progress i { display: block; height: 100%; background: var(--ink); transition: width 0.2s ease; }
+
+/* ---------- 结果 ---------- */
+.result-panel {
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  box-shadow: var(--shadow);
+  padding: 30px 32px;
+  margin-top: 26px;
+}
+.result-top {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 22px;
+}
+.score-block { display: flex; align-items: baseline; gap: 8px; }
+.score-num {
+  font-family: var(--serif);
+  font-size: 62px;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.score-den { font-size: 14px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.score-side { display: flex; flex-direction: column; gap: 8px; }
+.result-title { font-family: var(--serif); font-size: 19px; font-weight: 700; margin: 0; letter-spacing: 0.06em; }
+.result-sub { font-size: 13px; color: var(--ink-2); margin: 0; }
+
+.kv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin: 22px 0;
+}
+.kv {
+  background: var(--card);
+  padding: 14px 16px;
+}
+.kv-num { font-family: var(--serif); font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; display: block; line-height: 1.2; }
+.kv-num.part { color: var(--amber); }
+.kv-num.no { color: var(--red); }
+.kv-label { font-size: 11px; color: var(--ink-3); letter-spacing: 0.1em; display: block; margin-top: 3px; }
+
+.breakdown { display: flex; flex-direction: column; gap: 12px; }
+.bar-row { display: grid; grid-template-columns: 132px 1fr 52px; align-items: center; gap: 12px; font-size: 12.5px; }
+.bar-name { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { height: 6px; background: var(--rule); position: relative; }
+.bar-fill { height: 100%; background: var(--ink); transition: width 0.4s ease; }
+.bar-fill.hot { background: var(--red); }
+.bar-val { text-align: right; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.review-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.review-item {
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--red);
+  padding: 12px 14px;
+  background: var(--paper-2);
+  border-radius: 2px;
+}
+.review-stem { font-size: 13.5px; line-height: 1.7; margin: 0 0 6px; }
+.review-meta { font-size: 12px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 10px; }
+.review-meta b { color: var(--red); font-weight: 500; font-family: var(--serif); }
+.st-tag {
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  padding: 1px 6px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+}
+.st-tag.part { color: var(--amber); }
+.st-tag.no { color: var(--red); }
+.st-tag.none { color: var(--ink-3); }
+
+/* ---------- 题库列表 ---------- */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+.filter-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.filter-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  min-width: 56px;
+}
+.search-box {
+  flex: 1 1 200px;
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--rule);
+  padding: 8px 10px;
+  background: var(--paper-2);
+  border-radius: 3px;
+}
+.search-box input {
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  width: 100%;
+  outline: none;
+}
+
+.list-count {
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.q-list { display: flex; flex-direction: column; gap: 12px; }
+
+.q-item {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  padding: 16px 18px;
+  border-radius: 2px;
+}
+.q-item-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.q-item-id { font-family: var(--serif); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--ink-2); }
+.q-item-stem { font-size: 13.8px; line-height: 1.75; margin: 0 0 10px; }
+.q-item-opts { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--ink-2); margin-bottom: 10px; }
+.q-item-foot { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px dashed var(--rule); padding-top: 8px; }
+.ans-key { font-family: var(--serif); color: var(--red-deep); letter-spacing: 0.1em; font-size: 13px; }
+.ans-key.fill { letter-spacing: 0; }
+
+.empty-state {
+  border: 1px dashed var(--rule-strong);
+  padding: 42px 24px;
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 13.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.empty-state strong { font-family: var(--serif); font-size: 16px; color: var(--ink); font-weight: 700; }
+
+/* ---------- 错题 / 收藏 ---------- */
+.wrong-meta { display: flex; gap: 10px; align-items: center; font-size: 11.5px; color: var(--ink-3); }
+
+/* ---------- 更新日志 ---------- */
+.log-list { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+.log-entry {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 22px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.log-date { font-family: var(--serif); font-size: 13px; color: var(--ink-3); font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
+.log-title { font-family: var(--serif); font-size: 16px; font-weight: 700; margin: 0 0 8px; }
+.log-items { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 13px; }
+.log-items li { margin-bottom: 4px; }
+
+/* ---------- 提示条 ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--ink);
+  color: var(--paper-2);
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 3px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 90;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- 底部 ---------- */
+.footnote {
+  margin-top: 40px;
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 980px) {
+  .cover { grid-template-columns: 1fr; gap: 26px; padding-top: 34px; }
+  .quiz-layout { grid-template-columns: 1fr; }
+  .card-sheet { position: static; order: 2; }
+  .seal-wrap { justify-content: flex-start; }
+  .log-entry { grid-template-columns: 1fr; gap: 8px; }
+  .bar-row { grid-template-columns: 98px 1fr 44px; }
+}
+
+@media (max-width: 620px) {
+  .app { padding: 0 16px 56px; }
+  .topbar { padding: 12px 0 10px; }
+  .brand-title { font-size: 17px; }
+  .nav { gap: 4px; }
+  .nav-btn { padding: 6px 8px; font-size: 12px; }
+  .sheet { padding: 18px 16px 16px; }
+  .sheet::before { left: 8px; }
+  .stem { font-size: 15.5px; }
+  .cover-title { font-size: 30px; }
+  .result-panel { padding: 20px 16px; }
+  .result-top { grid-template-columns: 1fr; gap: 16px; }
+  .score-num { font-size: 46px; }
+  .fill-row { gap: 8px; }
+  .mini-grid { grid-template-columns: repeat(8, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-kicker">天津大学学生党校 · 第九十一期</span>
+      <h1 class="brand-title" id="pageTitle">入党申请人结业考试刷题</h1>
+    </div>
+    <nav class="nav" id="nav" aria-label="功能导航"></nav>
+  </header>
+
+  <main id="view"></main>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   入党申请人结业考试 · 刷题程序
+   数据层：标签体系 / 分类分组 / 更新日志
+   题库正文见 bank-choice.js 与 bank-fill.js
+   ============================================================ */
+
+window.QUIZ_META = {
+  title: "入党申请人结业考试刷题",
+  subtitle: "天津大学学生党校 · 结业考试复习指导与专题训练（第九十一期版）",
+  source: "题库来源：天津大学入党申请人培训结业考试复习指导与专题训练（第九十一期版）中的选择题与填空题",
+  version: "v1.3.1",
+  buildDate: "2026-11-17"
+};
+
+/* ---------- 分类分组：用于标签配色与筛选面板 ---------- */
+window.QUIZ_GROUPS = [
+  { id: "dangshi",   name: "党史",       note: "按历史阶段划分的事件线", tone: "red" },
+  { id: "dangzhang", name: "党章与党建", note: "党章条文、组织、纪律、党员", tone: "green" },
+  { id: "fazhan",    name: "发展党员",   note: "《中国共产党发展党员工作细则》", tone: "amber" },
+  { id: "lilun",     name: "党的理论",   note: "指导思想与基本理论", tone: "blue" },
+  { id: "shizheng",  name: "时政",       note: "十五五、四中全会、两会、政绩观", tone: "crimson" },
+  { id: "tianda",    name: "天津大学",   note: "校史校情与办学传统", tone: "gold" }
+];
+
+/* ---------- 标签 ---------- */
+window.QUIZ_TAGS = [
+  { id: "t-jiandang",  name: "建党初期",           group: "dangshi" },
+  { id: "t-dageming",  name: "大革命与北伐",       group: "dangshi" },
+  { id: "t-tudi",      name: "土地革命与长征",     group: "dangshi" },
+  { id: "t-kangzhan",  name: "抗日战争",           group: "dangshi" },
+  { id: "t-jiefang",   name: "解放战争与建国",     group: "dangshi" },
+  { id: "t-jianshe",   name: "社会主义建设探索",   group: "dangshi" },
+  { id: "t-gaige",     name: "改革开放",           group: "dangshi" },
+  { id: "t-xinshidai", name: "新时代与二十大",     group: "dangshi" },
+
+  { id: "t-zhonggang", name: "党章·总纲",          group: "dangzhang" },
+  { id: "t-zuzhi",     name: "党章·组织制度",      group: "dangzhang" },
+  { id: "t-jilv",      name: "党章·纪律与作风",    group: "dangzhang" },
+  { id: "t-dangyuan",  name: "党章·党员",          group: "dangzhang" },
+
+  { id: "t-chengxu",   name: "发展党员程序",       group: "fazhan" },
+
+  { id: "t-zhidao",    name: "指导思想",           group: "lilun" },
+  { id: "t-lilun",     name: "基本理论",           group: "lilun" },
+
+  { id: "t-shisiwu",   name: "十五五与四中全会",   group: "shizheng" },
+  { id: "t-zhengjiguan", name: "政绩观与两会",     group: "shizheng" },
+  { id: "t-shishi",    name: "时事·其他",          group: "shizheng" },
+
+  { id: "t-xiaoshi",   name: "天大校史",           group: "tianda" },
+  { id: "t-xiaoqing",  name: "天大校情",           group: "tianda" }
+];
+
+/* ---------- 更新日志 ---------- */
+window.QUIZ_CHANGELOG = [
+  {
+    version: "v1.3.1",
+    date: "2026-11-17",
+    title: "修正答题卡误标未作答的题",
+    items: [
+      "修正：停留在某道已判定的题上时，其他还没作答的方格也会被染成红色（把「当前题已显示答案」误当成「所有题都已判定」）。",
+      "现在只有本题自己作答过、或看过答案的方格才按对错上色；未作答的方格始终是中性色，只有当前题带红框。",
+      "交卷或整卷回顾时仍按整卷判定上色，结果不受影响。"
+    ]
+  },
+  {
+    version: "v1.3",
+    date: "2026-11-17",
+    title: "答题卡即时显示对错",
+    items: [
+      "即时刷题中，某题一旦看过答案，答题卡对应的方格立刻按结果上色：答对绿、部分琥珀、答错红。",
+      "不再把所有已作答的题统一显示成深色的「已答」，对错分布随时可见，方便随时回跳补题。",
+      "模拟试卷未交卷前仍只显示「已答」，不提前泄露判定结果。"
+    ]
+  },
+  {
+    version: "v1.2",
+    date: "2026-11-17",
+    title: "未作答计为答错 · 对错配色更清晰",
+    items: [
+      "没作答就点「显示答案」跳过的题，不再单列「未作答」，结算统计里直接并入「答错」，按 0 分计。",
+      "答题卡方格：答对为绿色、答错为红色，色块加深、数字加粗，扫一眼就能看出对错分布。",
+      "选项框：选对的选项加绿色底、选错的加红色底；填空题答对的空绿框、答错的空红框。",
+      "结算统计只保留「答对 / 部分正确 / 答错 / 题量」四项，未作答不再单独占一列。"
+    ]
+  },
+  {
+    version: "v1.1",
+    date: "2026-11-17",
+    title: "部分正确单独上色",
+    items: [
+      "多选题漏选：选对的选项标绿，被漏掉的正确选项改为琥珀色虚线并标注「漏选」，选错仍标红。",
+      "填空题半对：整题部分正确时，答错的空显示琥珀色，整题全错才显示红色；未填的空用虚线标出。",
+      "答题卡新增「部分」状态（琥珀色），图例同步更新，一眼能分辨漏选和答错。",
+      "结算页「部分正确」统计数字与回看列表的状态标记统一改为琥珀色。"
+    ]
+  },
+  {
+    version: "v1.0",
+    date: "2026-11-17",
+    title: "题库建成",
+    items: [
+      "录入《复习指导与专题训练（第九十一期版）》全部选择题与填空题，去重后共 98 道。",
+      "覆盖真题选讲、题型专练、第八十八期结业考试真题与附加题四个来源。",
+      "按题型（单选 / 多选 / 填空）与事件线（党史阶段、党章党建、发展党员、理论、时政、天津大学）双维度打标签。",
+      "上线模拟试卷、即时刷题、分类练习、错题重练、收藏栏、屏蔽题目、答题卡、结算评分、夜间模式。"
+    ]
+  }
+];
+
+</script>
+<script>
+/* ============================================================
+   题库 · 选择题（单选 + 多选）
+   字段：id / type / stem / options / answer / tags / src / ex
+   ============================================================ */
+
+window.BANK_CHOICE = [
+  {
+    id: "c001",
+    type: "single",
+    stem: "中国共产党第二十届中央委员会第四次全体会议指出，“十五五”时期我国经济基础稳、优势多、韧性强、潜能大，长期向好的支撑条件和基本趋势没有变，中国特色社会主义制度优势、超大规模市场优势、完整产业体系优势、（　）优势更加彰显。",
+    options: ["强大科研技术", "丰富人才资源", "雄厚人力资本", "充沛创新要素"],
+    answer: "B",
+    tags: ["t-shisiwu"],
+    src: "真题选讲 · 第八十七期",
+    ex: "全会公报的规范表述是“制度优势、超大规模市场优势、完整产业体系优势、丰富人才资源优势”。其余三项均非原文用语。"
+  },
+  {
+    id: "c002",
+    type: "single",
+    stem: "北伐军在短时间内取得巨大胜利的原因不包括（　）。",
+    options: [
+      "指战员有着明确的革命目标和不怕牺牲、英勇作战的革命精神",
+      "得到广大工人、农民和其他革命群众的直接支援",
+      "苏联军事顾问的帮助和苏联提供的物资援助",
+      "国共联合后的北伐军军事力量强于各军阀，并制定了集中兵力、各个歼敌的战略方针"
+    ],
+    answer: "D",
+    tags: ["t-dageming"],
+    src: "真题选讲 · 第八十七期",
+    ex: "北伐初期国民革命军约 10 万人，北洋军阀掌握军队约 70 万人，北伐军并非靠兵力优势取胜。D 项“军事力量强于各军阀”与史实不符。"
+  },
+  {
+    id: "c003",
+    type: "single",
+    stem: "中国共产党在中共（　）大上向全国人民第一次提出明确的反帝反封建的民主革命纲领。",
+    options: ["一", "二", "三", "四"],
+    answer: "B",
+    tags: ["t-jiandang"],
+    src: "真题选讲 · 第八十七期",
+    ex: "1922 年 7 月中共二大第一次明确提出彻底的反帝反封建民主革命纲领：消除内乱、打倒军阀，推翻国际帝国主义压迫，达到中华民族完全独立。"
+  },
+  {
+    id: "c004",
+    type: "single",
+    stem: "（　）是新中国成立后在财政经济战线上一个具有重大意义的胜利。它证明中国共产党不仅在军事上、政治上是强有力的，在经济上也是完全有办法的。",
+    options: ["恢复国民经济", "对资本主义工商业的社会主义改造", "调整产业结构", "稳定物价和统一财经的工作"],
+    answer: "D",
+    tags: ["t-jiefang"],
+    src: "真题选讲 · 第八十六期 / 第八十八期真题",
+    ex: "建国初期打击投机资本、稳定物价、统一全国财经，被称为财政经济战线上的重大胜利。"
+  },
+  {
+    id: "c005",
+    type: "single",
+    stem: "《中国共产党发展党员工作细则》规定：预备党员预备期满，党支部应当及时讨论其能否转为正式党员。认真履行党员义务、具备党员条件的，应当按期转为正式党员；需要继续考察和教育的，可以延长一次预备期，延长时间最长不超过（　）；不履行党员义务、不具备党员条件的，应当取消其预备党员资格。",
+    options: ["三个月", "六个月", "九个月", "一年"],
+    answer: "D",
+    tags: ["t-chengxu"],
+    src: "真题选讲 · 第八十九期",
+    ex: "依据《细则》第三十一条，延长预备期不能少于半年、最长不超过一年，且只能延长一次。"
+  },
+  {
+    id: "c006",
+    type: "single",
+    stem: "在五四运动以后的马克思主义传播中，李大钊起了主要作用。1919 年，他在《新青年》上发表（　）一文，比较全面地介绍马克思主义唯物史观、经济学说和社会主义理论。",
+    options: ["《我的马克思主义观》", "《谈政治》", "《庶民的胜利》", "《青春》"],
+    answer: "A",
+    tags: ["t-jiandang"],
+    src: "题型专练",
+    ex: "《我的马克思主义观》是李大钊系统介绍马克思主义三大部分的标志性文章，1919 年分两期发表于《新青年》。"
+  },
+  {
+    id: "c007",
+    type: "single",
+    stem: "陈天华认为清政府成为洋人的朝廷，是因为 1901 年（　）的签订。",
+    options: ["《南京条约》", "《北京条约》", "《辛丑条约》", "《马关条约》"],
+    answer: "C",
+    tags: ["t-jiandang"],
+    src: "题型专练",
+    ex: "1901 年《辛丑条约》签订后，清政府完全成为列强统治中国的工具，故有“洋人的朝廷”之说。"
+  },
+  {
+    id: "c008",
+    type: "single",
+    stem: "下列选项中，哪一项是新民主主义革命的性质（　）？",
+    options: [
+      "无产阶级领导的、人民大众的、反对帝国主义、封建主义、官僚资本主义的无产阶级民主革命",
+      "无产阶级领导的、人民大众的、反对帝国主义、封建主义、官僚资本主义的资产阶级民主革命",
+      "资产阶级领导的、人民大众的、反对帝国主义、封建主义、官僚资本主义的资产阶级民主革命",
+      "资产阶级领导的、人民大众的、反对帝国主义、封建主义、官僚资本主义的无产阶级民主革命"
+    ],
+    answer: "B",
+    tags: ["t-lilun", "t-jiandang"],
+    src: "题型专练",
+    ex: "新民主主义革命由无产阶级领导，但革命任务是反帝反封建反官僚资本主义，性质仍属资产阶级民主革命。领导权与性质这两个要素不能混淆。"
+  },
+  {
+    id: "c009",
+    type: "single",
+    stem: "中国共产党的最早组织是在（　）建立的。",
+    options: ["北京", "上海", "天津", "广东"],
+    answer: "B",
+    tags: ["t-jiandang"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "1920 年 8 月，陈独秀等在上海成立中国第一个共产党早期组织，并推动各地建立党组织。"
+  },
+  {
+    id: "c010",
+    type: "single",
+    stem: "为彻底清算并纠正党在过去工作中的严重错误，决定新的方针，中共中央于 8 月 7 日在汉口秘密召开紧急会议，即著名的八七会议。会议彻底清算了大革命后期陈独秀的右倾机会主义错误，确定了土地革命和武装起义的方针。在此次会议中，毛泽东提出了（　）这一著名论断。",
+    options: ["“兵民是胜利之本”", "“星星之火，可以燎原”", "“一切反动派都是纸老虎”", "“政权是由枪杆子中取得的”"],
+    answer: "D",
+    tags: ["t-dageming"],
+    src: "题型专练",
+    ex: "1927 年 8 月 7 日八七会议上，毛泽东提出“政权是由枪杆子中取得的”，会议确定了土地革命和武装反抗国民党反动派的总方针。"
+  },
+  {
+    id: "c011",
+    type: "single",
+    stem: "我校著名校友张太雷同志是在（　）中英勇牺牲的。",
+    options: ["秋收起义", "广州起义", "南昌起义", "上海起义"],
+    answer: "B",
+    tags: ["t-dageming", "t-xiaoshi"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "张太雷是天津大学（原北洋大学）校友，1927 年 12 月领导广州起义，在战斗中牺牲，年仅 29 岁。"
+  },
+  {
+    id: "c012",
+    type: "single",
+    stem: "（　）之后，以毛泽东为核心的党中央的正确领导开始确立。",
+    options: ["八七会议", "遵义会议", "中国共产党第七次全国代表大会", "中华苏维埃第一次全国代表大会"],
+    answer: "B",
+    tags: ["t-tudi"],
+    src: "题型专练",
+    ex: "1935 年 1 月遵义会议实际确立了毛泽东在党和红军中的领导地位，是党在长征途中一次生死攸关的转折点。"
+  },
+  {
+    id: "c013",
+    type: "single",
+    stem: "党章指出，党的领导主要是政治领导、思想领导和（　）。",
+    options: ["组织领导", "理论领导", "制度领导", "道德领导"],
+    answer: "A",
+    tags: ["t-zhonggang"],
+    src: "题型专练",
+    ex: "党章总纲明确：党的领导主要是政治、思想和组织的领导。"
+  },
+  {
+    id: "c014",
+    type: "single",
+    stem: "1935 年 12 月 9 日，数千爱国学生在（　）举行了声势浩大的抗日游行，史称“一二·九”运动。",
+    options: ["北平", "天津", "陕西", "延安"],
+    answer: "A",
+    tags: ["t-tudi"],
+    src: "题型专练",
+    ex: "一二·九运动爆发于北平，推动了抗日民族统一战线的建立。"
+  },
+  {
+    id: "c015",
+    type: "single",
+    stem: "1956 年，生产资料的社会主义改造基本完成，（　）和劳动群众集体所有制这两种社会主义公有制形式，已在整个国民经济中占据绝对优势地位。伴随着社会主义经济基础的建立，我国人民民主专政的国家制度也逐步健全起来。",
+    options: ["全民公有制", "全民所有制", "资本主义私有制", "个体私有制"],
+    answer: "B",
+    tags: ["t-jianshe"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "社会主义公有制包括全民所有制和劳动群众集体所有制两种形式，规范说法是“全民所有制”。"
+  },
+  {
+    id: "c016",
+    type: "single",
+    stem: "南方谈话进一步解放了人们的思想，为社会主义市场经济体制的建立指明了方向。邓小平在南方谈话中强调“计划多一点还是市场多一点，不是社会主义与资本主义的本质区别”。这一论断的核心在于说明（　）。",
+    options: ["计划和市场都是发展经济的手段", "社会主义只能搞市场经济", "资本主义只能搞计划经济", "计划和市场没有任何联系"],
+    answer: "A",
+    tags: ["t-gaige"],
+    src: "题型专练",
+    ex: "邓小平指出计划与市场都是经济手段，资本主义可以用，社会主义也可以用，二者都不是社会制度的本质特征。"
+  },
+  {
+    id: "c017",
+    type: "single",
+    stem: "新加坡前总理李光耀曾说：“中国人民走向民族复兴是从跨过鸭绿江的那一刻开始的，敢于和世界上最强的国家较量，还能战而胜之。”这说明抗美援朝战争的胜利（　）。",
+    options: ["使中国走上了独立自主的道路", "打破了西方对华封锁的状态", "提高了中国的国际地位和威望", "使中国迅速成为世界强国"],
+    answer: "C",
+    tags: ["t-jiefang"],
+    src: "题型专练",
+    ex: "抗美援朝打出了国威军威，最直接的意义是极大提高了新中国的国际地位与威望。"
+  },
+  {
+    id: "c018",
+    type: "single",
+    stem: "中国共产党的最大政治优势是（　）。",
+    options: ["密切联系群众", "全面从严治党", "把人民的利益放在第一位", "全心全意为人民服务"],
+    answer: "A",
+    tags: ["t-zhonggang"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章总纲的表述是“党的最大政治优势是密切联系群众，党执政后的最大危险是脱离群众”。"
+  },
+  {
+    id: "c019",
+    type: "single",
+    stem: "根据《中国共产党章程》，党组织对违犯党的纪律的党员，应当本着（　）的精神，按照错误性质和情节轻重，给以批评教育直至纪律处分。",
+    options: ["惩前毖后、治病救人", "团结——批评——团结", "批评与自我批评", "实事求是"],
+    answer: "A",
+    tags: ["t-jilv"],
+    src: "题型专练",
+    ex: "党章第四十条：党组织对违犯党的纪律的党员，应当本着惩前毖后、治病救人的精神处理。"
+  },
+  {
+    id: "c020",
+    type: "single",
+    stem: "1956 年 4 月 28 日，毛泽东在中共中央政治局扩大会议上提出：（　），应该成为我国发展科学、繁荣文学艺术的方针。",
+    options: ["科教兴国，人才强国", "韬光养晦，有所作为", "解放思想，实事求是", "百花齐放，百家争鸣"],
+    answer: "D",
+    tags: ["t-jianshe"],
+    src: "题型专练",
+    ex: "“百花齐放、百家争鸣”是 1956 年提出的繁荣科学文化的基本方针。"
+  },
+  {
+    id: "c021",
+    type: "single",
+    stem: "按期转正，延长预备期，取消预备党员资格，都必须经（　）讨论通过并报上级党委批准。",
+    options: ["支部大会", "正式党员", "民主生活会", "入党申请人学习小组"],
+    answer: "A",
+    tags: ["t-chengxu"],
+    src: "题型专练",
+    ex: "《发展党员工作细则》规定，上述事项均须经支部大会讨论通过并报上级党委批准。"
+  },
+  {
+    id: "c022",
+    type: "single",
+    stem: "中国特色社会主义事业的总体布局是（　）。",
+    options: [
+      "“一个中心，两个基本点”",
+      "“两个文明，两手抓”",
+      "经济、政治、文化、社会、生态文明建设“五位一体”",
+      "基本理论、基本实践、基本纲领、基本经验、基本制度"
+    ],
+    answer: "C",
+    tags: ["t-zhonggang"],
+    src: "题型专练 / 第八十八期真题（填空）",
+    ex: "总体布局是“五位一体”：经济建设、政治建设、文化建设、社会建设、生态文明建设。"
+  },
+  {
+    id: "c023",
+    type: "single",
+    stem: "党章规定，要深入推进党风廉政建设和反腐败斗争，以（　）态度惩治腐败，一体推进不敢腐、不能腐、不想腐。",
+    options: ["零容忍", "严厉", "认真", "严肃"],
+    answer: "A",
+    tags: ["t-jilv"],
+    src: "题型专练",
+    ex: "规范表述是“以零容忍态度惩治腐败”，并一体推进不敢腐、不能腐、不想腐。"
+  },
+  {
+    id: "c024",
+    type: "single",
+    stem: "党章规定，党的各级组织要按规定实行（　），使党员对党内事务有更多的了解和参与。",
+    options: ["党务公开", "民主集中制", "党内监督", "集体领导"],
+    answer: "A",
+    tags: ["t-dangyuan"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章第十条后相关条款要求党的各级组织按规定实行党务公开，保障党员对党内事务的知情与参与。"
+  },
+  {
+    id: "c025",
+    type: "single",
+    stem: "党章规定：必须充分发挥党内民主，尊重党员主体地位，保障党员民主权利，发挥各级党组织和广大党员的（　）。",
+    options: ["主动性、创造性", "积极性、主动性", "积极性、创造性", "民主性、创造性"],
+    answer: "C",
+    tags: ["t-dangyuan"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章总纲原文为“发挥各级党组织和广大党员的积极性、创造性”。"
+  },
+  {
+    id: "c026",
+    type: "single",
+    stem: "马克思列宁主义揭示了（　）的规律，它的基本原理是正确的，具有强大的生命力。",
+    options: ["人类社会历史发展", "资本主义发展及其内在矛盾", "辩证唯物主义", "共产主义"],
+    answer: "A",
+    tags: ["t-zhidao"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章总纲：马克思列宁主义揭示了人类社会历史发展的规律。"
+  },
+  {
+    id: "c027",
+    type: "single",
+    stem: "在 1956 年的中共八大上，由陈云同志提出的经济建设方面的重要思想是（　）。",
+    options: ["科学技术是第一生产力", "十五年赶超英美", "三个主体，三个补充", "综合平衡中稳步前进"],
+    answer: "C",
+    tags: ["t-jianshe"],
+    src: "题型专练",
+    ex: "陈云在八大提出“三个主体、三个补充”，主张在国家与集体经营为主体的前提下保留一定的个体经营作为补充。"
+  },
+  {
+    id: "c028",
+    type: "single",
+    stem: "党的纪律处分有（　）。",
+    options: [
+      "警告、严重警告、撤销党内职务、留党察看、开除党籍",
+      "警告、撤销党内外职务；留党察看、取消党籍、开除党籍",
+      "警告、严重警告、撤职查办、留党察看、开除党籍",
+      "警告、严重警告、记过、留党察看、开除党籍"
+    ],
+    answer: "A",
+    tags: ["t-jilv"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章规定的五种纪律处分：警告、严重警告、撤销党内职务、留党察看、开除党籍。"
+  },
+  {
+    id: "c029",
+    type: "single",
+    stem: "党员如果没有正当理由，连续（　）不参加党的组织生活，或不交纳党费，或不做党所分配的工作，就被认为是自行脱党。",
+    options: ["一年", "九个月", "六个月", "三个月"],
+    answer: "C",
+    tags: ["t-dangyuan"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章第九条：连续六个月不参加党的组织生活，或不交纳党费，或不做党所分配的工作，即被认为是自行脱党。"
+  },
+  {
+    id: "c030",
+    type: "single",
+    stem: "改革开放以来，天津大学首倡（　）的办学思路，深化高等工程教育改革，聚焦国家重大战略需求、聚焦世界科技发展前沿，培养了 30 万高层次人才。",
+    options: [
+      "“全面性、科研型、包容式、前沿化”",
+      "“全面性、研究型、包容式、前沿化”",
+      "“综合性、科研型、开放式、国际化”",
+      "“综合性、研究型、开放式、国际化”"
+    ],
+    answer: "D",
+    tags: ["t-xiaoqing"],
+    src: "题型专练 / 第八十八期真题（填空）",
+    ex: "“综合性、研究型、开放式、国际化”是天津大学首倡的办学思路，四个词顺序固定。"
+  },
+  {
+    id: "c031",
+    type: "single",
+    stem: "党的纪律处分应坚持的原则不包括（　）。",
+    options: ["党要管党，全面从严治党", "差异化、人性化", "民主集中制", "惩前毖后、治病救人"],
+    answer: "B",
+    tags: ["t-jilv"],
+    src: "题型专练",
+    ex: "党章规定的纪律处分工作原则包括党要管党全面从严治党、党纪面前一律平等、实事求是、民主集中制、惩前毖后治病救人。“差异化、人性化”不是其中原则。"
+  },
+  {
+    id: "c032",
+    type: "single",
+    stem: "企业、农村、机关、学校、科研院所、街道社区、社会团体、社会中介组织、人民解放军连队和其他基层单位，凡是有（　）以上的，都应当成立党的基层组织。",
+    options: ["预备党员五人", "正式党员三人", "正式党员五人", "预备党员三人"],
+    answer: "B",
+    tags: ["t-zuzhi"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章第二十九条：凡有正式党员三人以上的，都应当成立党的基层组织。"
+  },
+  {
+    id: "c033",
+    type: "single",
+    stem: "坚持真理、坚守理想，践行初心、担当使命，不怕牺牲、英勇斗争，对党忠诚、不负人民是对（　）的完美诠释。",
+    options: ["红船精神", "长征精神", "改革开放精神", "伟大建党精神"],
+    answer: "D",
+    tags: ["t-zhidao"],
+    src: "题型专练",
+    ex: "这 32 个字即伟大建党精神的内涵，由习近平总书记在庆祝中国共产党成立一百周年大会上提出。"
+  },
+  {
+    id: "c034",
+    type: "single",
+    stem: "中国共产党人追求的共产主义最高理想，只有在（　）充分发展和高度发达的基础上才能实现。",
+    options: ["社会主义初级阶段", "资本主义社会", "社会主义社会", "封建主义社会"],
+    answer: "C",
+    tags: ["t-zhidao"],
+    src: "题型专练",
+    ex: "党章总纲：共产主义最高理想只有在社会主义社会充分发展和高度发达的基础上才能实现。"
+  },
+  {
+    id: "c035",
+    type: "single",
+    stem: "中共天津大学第十一次党员代表大会于 2023 年 2 月 23 日召开，大会的主题是：高举中国特色社会主义伟大旗帜，以习近平新时代中国特色社会主义思想为指导，全面贯彻党的二十大精神，坚持立德树人，落实（　），推动高质量发展，踔厉奋发、勇毅前行，奋力开创中国特色、世界一流大学建设新局面。",
+    options: ["“九个坚持”", "“三个深刻认识、准确把握”", "“四个服务”", "“五个始终”"],
+    answer: "C",
+    tags: ["t-xiaoqing"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "大会主题中“落实‘四个服务’”指教育要为人民服务、为中国共产党治国理政服务、为巩固和发展中国特色社会主义制度服务、为改革开放和社会主义现代化建设服务。"
+  },
+  {
+    id: "c036",
+    type: "single",
+    stem: "1935 年 12 月，中共中央在陕北召开政治局扩大会议，确立了抗日民族统一战线政策。这次会议是（　）。",
+    options: ["瓦窑堡会议", "古田会议", "遵义会议", "洛川会议"],
+    answer: "A",
+    tags: ["t-kangzhan"],
+    src: "题型专练",
+    ex: "1935 年 12 月瓦窑堡会议确定了建立抗日民族统一战线的策略方针。"
+  },
+  {
+    id: "c037",
+    type: "single",
+    stem: "改革开放后最早建立的四个经济特区是（　）。",
+    options: ["深圳、珠海、海南、厦门", "珠海、海南、厦门、福建", "深圳、珠海、厦门、汕头", "珠海、厦门、汕头、福建"],
+    answer: "C",
+    tags: ["t-gaige"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "1980 年设立深圳、珠海、厦门、汕头四个经济特区；海南是 1988 年建省并办特区，不在最早四地之内。"
+  },
+  {
+    id: "c038",
+    type: "single",
+    stem: "共产党员以个人身份加入国民党，实现国共合作，这一决定是在（　）。",
+    options: ["中共二大", "中共三大", "国民党一大", "国民党二大"],
+    answer: "B",
+    tags: ["t-dageming"],
+    src: "题型专练",
+    ex: "1923 年中共三大决定共产党员以个人身份加入国民党，实行党内合作；1924 年国民党一大标志第一次国共合作正式形成。"
+  },
+  {
+    id: "c039",
+    type: "single",
+    stem: "习近平总书记强调，树立和践行正确政绩观，起决定性作用的是（　）；必须牢记（　）是最大政绩，坚持实事求是、求真务实，从实际出发谋划和推进工作。",
+    options: ["能力素质；经济增长", "党性；为民造福", "工作作风；项目落地", "担当精神；形象提升"],
+    answer: "B",
+    tags: ["t-zhengjiguan"],
+    src: "题型专练",
+    ex: "起决定性作用的是党性，为民造福是最大政绩——这是正确政绩观的两个核心判断。"
+  },
+  {
+    id: "c040",
+    type: "single",
+    stem: "1901 年，（　）的签订，标志清政府成为“洋人的朝廷”。",
+    options: ["《南京条约》", "《北京条约》", "《辛丑条约》", "《马关条约》"],
+    answer: "C",
+    tags: ["t-jiandang"],
+    src: "题型专练",
+    ex: "《辛丑条约》使中国完全陷入半殖民地半封建社会的深渊，清政府沦为列强统治中国的工具。"
+  },
+  {
+    id: "c041",
+    type: "single",
+    stem: "《中国共产党发展党员工作细则》规定：发展党员工作坚持党章规定的党员标准，始终把政治标准放在首位；坚持入党自愿原则和（　）原则，成熟一个，发展一个。禁止突击发展，反对“关门主义”。",
+    options: ["广泛发展", "个别吸收", "稳步发展", "多级发展"],
+    answer: "B",
+    tags: ["t-chengxu"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "入党自愿与个别吸收是发展党员的两条基本原则，“成熟一个、发展一个”。"
+  },
+  {
+    id: "c042",
+    type: "single",
+    stem: "党的建设必须坚决实现六项基本要求，以下不属于六项基本要求的是（　）。",
+    options: ["坚持解放思想，实事求是，与时俱进，求真务实", "坚持新时代党的组织路线", "坚持以人民为中心的发展思想", "坚持从严管党治党"],
+    answer: "C",
+    tags: ["t-zhonggang"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党章总纲规定的六项基本要求中不含“坚持以人民为中心的发展思想”这一条的具体表述，其余三项均为其中内容。"
+  },
+  {
+    id: "c043",
+    type: "single",
+    stem: "《中国共产党发展党员工作细则》规定：发展对象应当有（　）作入党介绍人。入党介绍人一般由培养联系人担任，也可由党组织指定。",
+    options: ["一名正式党员", "两名正式党员", "一名正式党员或两名预备党员", "两名预备党员"],
+    answer: "B",
+    tags: ["t-chengxu"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "入党介绍人须为两名正式党员。"
+  },
+  {
+    id: "c044",
+    type: "single",
+    stem: "小耀是一名天津大学的大一新生，已经年满 18 岁，是中国公民，无宗教信仰，承认党的纲领和章程，愿意加入党的一个组织并积极工作。关于他申请入党的下一步关键流程，下列说法正确的是（　）。",
+    options: [
+      "因其表现优秀，团支部可以直接将其列为入党积极分子人选",
+      "他可以向所在学院的党支部正式提交书面入党申请，党支部应在一个月内派人同他谈话",
+      "他提交入党申请后，经党支部集体审查合格，即可被确定为入党积极分子",
+      "他提交入党申请后，经班级同学民主投票通过，即可被确定为入党发展对象"
+    ],
+    answer: "B",
+    tags: ["t-chengxu"],
+    src: "题型专练",
+    ex: "《细则》规定，党支部收到入党申请书后应在一个月内派人同申请人谈话，了解基本情况并做好教育引导。"
+  },
+  {
+    id: "c045",
+    type: "single",
+    stem: "国际反法西斯统一战线正式形成的标志是（　）。",
+    options: ["26 个国家签署《联合国家宣言》", "中共中央主张建立反法西斯的国际统一战线", "美国对日本宣战", "诺曼底登陆战的胜利"],
+    answer: "A",
+    tags: ["t-kangzhan"],
+    src: "题型专练",
+    ex: "1942 年 1 月 1 日，26 国在华盛顿签署《联合国家宣言》，标志国际反法西斯统一战线正式形成。"
+  },
+  {
+    id: "c046",
+    type: "single",
+    stem: "结合中共中央办公厅印发的树立和践行正确政绩观学习教育通知及 2026 年全国两会精神，下列关于政绩观的认知与实践，不符合正确政绩观核心要求的是（　）。",
+    options: [
+      "树立政绩观要始终坚守人民立场，将为民造福作为最大政绩，把实绩体现在群众的获得感、幸福感、安全感中",
+      "推进地方发展既要让群众“口袋鼓起来”实现物质富裕，也要重视精神文明建设让“脑袋富起来”",
+      "干事创业中优先抓短期见效、易留痕迹的“显绩”，打基础、利长远的“潜绩”可待任期后期再逐步推进",
+      "政绩的取得必须依靠真抓实干，将科学规划与有力执行紧密结合，坚决摒弃弄虚作假、华而不实的表面文章"
+    ],
+    answer: "C",
+    tags: ["t-zhengjiguan"],
+    src: "题型专练",
+    ex: "正确政绩观反对重“显绩”轻“潜绩”，要求既做显功也做潜功，不能把打基础、利长远的事往后推。"
+  },
+  {
+    id: "c047",
+    type: "single",
+    stem: "天津大学建校时间为（　）。",
+    options: ["1895 年 10 月 2 日", "1895 年 10 月 1 日", "1895 年 9 月 2 日", "1895 年 9 月 1 日"],
+    answer: "A",
+    tags: ["t-xiaoshi"],
+    src: "题型专练",
+    ex: "1895 年 10 月 2 日，北洋大学堂开学，是中国第一所现代大学，即天津大学前身。"
+  },
+  {
+    id: "c048",
+    type: "multi",
+    stem: "回归祖国后，香港同胞实现当家作主，实行（　），香港真正的民主由此开启。",
+    options: ["港人治港", "中央治港", "完全自治", "高度自治"],
+    answer: "AD",
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "“一国两制”下香港实行“港人治港、高度自治”，但自治权来自中央授权，不是“完全自治”。"
+  },
+  {
+    id: "c049",
+    type: "multi",
+    stem: "进入二十一世纪，在和平与发展成为时代主题的当今世界，科技进步日新月异，经济全球化进程加快发展，世界格局多极化趋势不可逆转，以综合国力为基础的竞争日趋激烈。（　）是党在新世纪的三大任务。",
+    options: ["继续推进社会主义现代化建设", "完成祖国统一大业", "维护世界和平与促进共同发展", "实现中华民族伟大复兴"],
+    answer: "ABC",
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "党的十六大明确的三大历史任务：现代化建设、完成祖国统一、维护世界和平与促进共同发展。"
+  },
+  {
+    id: "c050",
+    type: "multi",
+    stem: "《中国共产党章程》规定：党在任何时候都把群众利益放在第一位，同群众同甘共苦，保持最密切的联系，坚持（　），不允许任何党员脱离群众，凌驾于群众之上。",
+    options: ["权为民所用", "利为民所谋", "情为民所系", "绩为民所创"],
+    answer: "ABC",
+    tags: ["t-zhonggang"],
+    src: "题型专练",
+    ex: "党章原文为“权为民所用、情为民所系、利为民所谋”，三者顺序固定，无“绩为民所创”。"
+  },
+  {
+    id: "c051",
+    type: "multi",
+    stem: "全党要坚持（　），从党的百年奋斗中看清楚过去我们为什么能够成功、弄明白未来我们怎样才能继续成功，从而更加坚定、更加自觉地践行初心使命。",
+    options: ["唯物史观", "唯心史观", "正确党史观", "社会史观"],
+    answer: "AC",
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "全会要求坚持唯物史观和正确党史观，这是总结党的百年奋斗历史的基本立场和方法。"
+  },
+  {
+    id: "c052",
+    type: "multi",
+    stem: "2026 年作为“十五五”开局之年，我国经济社会发展面临的核心战略任务与历史定位，下列表述准确的有（　）。",
+    options: [
+      "这是以中国式现代化全面推进强国建设、民族复兴伟业的关键起步期，需为 2035 年基本实现社会主义现代化奠定决定性基础",
+      "这是应对世界百年变局加速演进、外部环境复杂性严峻性不确定性上升的战略承压期，需在统筹发展和安全中打开事业发展新天地",
+      "这是推动高质量发展向纵深突破的重要窗口期，需以规模扩张和要素投入为引领，实现经济发展量的快速增长",
+      "这是进一步全面深化改革、推进国家治理体系和治理能力现代化的集中攻坚期，需推动标志性改革举措落地见效"
+    ],
+    answer: "ABD",
+    tags: ["t-shisiwu"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "C 项仍以规模扩张与要素投入为引领，与高质量发展要求相反，故不选。"
+  },
+  {
+    id: "c053",
+    type: "multi",
+    stem: "马克思列宁主义同中国实际相结合有三次历史性飞跃，产生了（　）三大理论成果。",
+    options: ["毛泽东思想", "邓小平理论", "中国特色社会主义理论体系", "习近平新时代中国特色社会主义思想"],
+    answer: "ACD",
+    tags: ["t-zhidao"],
+    src: "题型专练",
+    ex: "三次飞跃对应毛泽东思想、中国特色社会主义理论体系、习近平新时代中国特色社会主义思想三大成果。邓小平理论属于中国特色社会主义理论体系的组成部分，不单列为一次飞跃的成果。"
+  },
+  {
+    id: "c054",
+    type: "multi",
+    stem: "坚持改革开放，是我们的强国之路，应当（　）。",
+    options: [
+      "从根本上改革束缚生产力发展的经济体制，坚持和完善社会主义市场经济体制",
+      "进行政治体制改革和其他领域的改革",
+      "要坚持对外开放的基本国策，吸收和借鉴人类社会创造的一切文明成果",
+      "大胆探索，勇于开拓，提高改革决策的科学性，更加注重改革的系统性、整体性、协同性，在实践中开创新路"
+    ],
+    answer: "ABCD",
+    tags: ["t-gaige"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "四项均为党章总纲中关于改革开放的完整表述，须全选。"
+  },
+  {
+    id: "c055",
+    type: "multi",
+    stem: "抗日战争胜利的历史意义有（　）。",
+    options: [
+      "使中华民族一洗百年耻辱",
+      "使中国的国际地位空前提高",
+      "是中华民族由衰败走向振兴的重大转折点",
+      "为夺取整个新民主主义革命的胜利，奠定了坚实的基础"
+    ],
+    answer: "ABCD",
+    tags: ["t-kangzhan"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "四项分别从民族耻辱、国际地位、民族命运、革命进程四个角度概括抗战胜利的意义，均为正确表述。"
+  },
+  {
+    id: "c056",
+    type: "multi",
+    stem: "中共七大总结历史经验，把党在长期奋斗中形成的优良传统作风概括为三大作风，三大作风的内涵为（　）。",
+    options: ["理论和实践相结合的作风", "和人民群众紧密联系在一起的作风", "实事求是的作风", "批评和自我批评的作风"],
+    answer: "ABD",
+    tags: ["t-zhonggang"],
+    src: "题型专练",
+    ex: "三大作风是理论联系实际、密切联系群众、批评与自我批评。实事求是是党的思想路线，不在三大作风之列。"
+  },
+  {
+    id: "c057",
+    type: "multi",
+    stem: "“政治三力”是指（　）。",
+    options: ["政治执行力", "政治判断力", "政治领悟力", "政治凝聚力"],
+    answer: "ABC",
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "政治三力为政治判断力、政治领悟力、政治执行力。"
+  },
+  {
+    id: "c058",
+    type: "single",
+    stem: "辛亥革命爆发的时间是（　）。",
+    options: ["1910 年 10 月", "1910 年 11 月", "1911 年 10 月", "1911 年 11 月"],
+    answer: "C",
+    tags: ["t-jiandang"],
+    src: "第八十八期真题",
+    ex: "1911 年 10 月 10 日武昌起义爆发，辛亥革命由此开始。"
+  },
+  {
+    id: "c059",
+    type: "single",
+    stem: "（　）是中国颂扬俄国十月革命的第一人。",
+    options: ["孙中山", "毛泽东", "李大钊", "林则徐"],
+    answer: "C",
+    tags: ["t-jiandang"],
+    src: "第八十八期真题",
+    ex: "李大钊在 1918 年发表《法俄革命之比较观》《庶民的胜利》《布尔什维主义的胜利》，最早在中国颂扬十月革命。"
+  },
+  {
+    id: "c060",
+    type: "single",
+    stem: "（　）是中国工人阶级第一次直接同帝国主义势力进行的有组织的较量。罢工的胜利，增强了工人阶级的战斗勇气和信心，推动了全国工人运动的发展。",
+    options: ["香港海员罢工", "安源路矿工人罢工", "二七大罢工", "开滦煤矿工人罢工"],
+    answer: "A",
+    tags: ["t-dageming"],
+    src: "第八十八期真题",
+    ex: "1922 年香港海员罢工是第一次全国劳动大会后中国工人阶级第一次直接同帝国主义势力进行的有组织较量。"
+  },
+  {
+    id: "c061",
+    type: "single",
+    stem: "“四一二”政变后国共合作并未完全破裂，中共中央仍在和（　）的国民党人合作。",
+    options: ["北京", "南京", "广州", "武汉"],
+    answer: "D",
+    tags: ["t-dageming"],
+    src: "第八十八期真题",
+    ex: "四一二政变后，武汉国民政府尚未反共，中共中央仍在同武汉的国民党人合作，直至七一五政变。"
+  },
+  {
+    id: "c062",
+    type: "single",
+    stem: "日本天皇宣布无条件投降的时间是（　）。",
+    options: ["1945 年 9 月 12 日", "1945 年 8 月 9 日", "1945 年 9 月 17 日", "1945 年 8 月 15 日"],
+    answer: "D",
+    tags: ["t-kangzhan"],
+    src: "第八十八期真题",
+    ex: "1945 年 8 月 15 日日本天皇宣布无条件投降；9 月 2 日正式签署投降书。"
+  },
+  {
+    id: "c063",
+    type: "single",
+    stem: "国民党军队主力基本被消灭是在（　）。",
+    options: ["全国大陆解放后", "南京解放后", "三大战役后", "渡江战役后"],
+    answer: "C",
+    tags: ["t-jiefang"],
+    src: "第八十八期真题",
+    ex: "辽沈、淮海、平津三大战役共歼灭和改编国民党军队 150 余万人，其主力基本被消灭。"
+  },
+  {
+    id: "c064",
+    type: "single",
+    stem: "党章规定，党的最高领导机关是（　）。",
+    options: ["中央政治局", "中央书记处", "党的全国代表大会和它所产生的中央委员会", "全国人民代表大会"],
+    answer: "C",
+    tags: ["t-zuzhi"],
+    src: "第八十八期真题",
+    ex: "党章第十条：党的最高领导机关是党的全国代表大会和它所产生的中央委员会。"
+  },
+  {
+    id: "c065",
+    type: "single",
+    stem: "中国共产党的宗旨是（　）。",
+    options: ["立党为公、执政为民", "建设社会主义和谐社会", "全心全意为人民服务", "实现中华民族伟大复兴的中国梦"],
+    answer: "C",
+    tags: ["t-zhonggang"],
+    src: "第八十八期真题",
+    ex: "党的宗旨是全心全意为人民服务；立党为公、执政为民是对执政理念的表述，不等同于宗旨。"
+  },
+  {
+    id: "c066",
+    type: "single",
+    stem: "党的二十大报告指出，（　）是国家治理的一场深刻革命，关系党执政兴国，关系人民幸福安康，关系党和国家长治久安。",
+    options: ["全面深化改革", "全面依法治国", "全面从严治党", "全面反贪反腐"],
+    answer: "B",
+    tags: ["t-xinshidai"],
+    src: "第八十八期真题",
+    ex: "二十大报告用“国家治理的一场深刻革命”定位全面依法治国。"
+  },
+  {
+    id: "c067",
+    type: "single",
+    stem: "预备党员除没有表决权、（　）、被选举权外，其他权利与正式党员相同。",
+    options: ["选举权", "投票权", "监督权", "质询权"],
+    answer: "A",
+    tags: ["t-dangyuan"],
+    src: "第八十八期真题",
+    ex: "党章第七条：预备党员没有表决权、选举权和被选举权。"
+  },
+  {
+    id: "c068",
+    type: "single",
+    stem: "小天已经成为了一名入党积极分子，经过党支部一年以上的培养教育和考察，基本具备党员条件。关于他从入党积极分子到成为预备党员的下一步流程，下列说法正确的是（　）。",
+    options: [
+      "党支部可直接将其列为发展对象，无需听取任何其他组织意见",
+      "党支部需听取党小组、培养联系人、党员和群众意见，经支部委员会讨论同意并报上级党委备案后，方可列为发展对象",
+      "他必须参加过集中培训并取得结业证书，这是确定为发展对象的唯一前提条件",
+      "他需先通过所在学院的民主投票，得票率超过 80% 即可自动成为发展对象"
+    ],
+    answer: "B",
+    tags: ["t-chengxu"],
+    src: "第八十八期真题",
+    ex: "《细则》规定，确定发展对象须听取党小组、培养联系人、党员和群众意见，经支部委员会讨论同意后报上级党委备案。"
+  },
+  {
+    id: "c069",
+    type: "single",
+    stem: "全面加强练兵备战，提高捍卫国家主权、安全、发展利益的战略能力，确保（　）年实现建军百年奋斗目标。",
+    options: ["2027", "2030", "2035", "2050"],
+    answer: "A",
+    tags: ["t-xinshidai"],
+    src: "第八十八期真题",
+    ex: "党的二十大明确，确保 2027 年实现建军一百年奋斗目标。"
+  },
+  {
+    id: "c070",
+    type: "single",
+    stem: "我国要坚持以（　）引领文化建设。",
+    options: ["社会主义思想道德建设", "社会主义现代化建设", "中华优秀传统文化", "社会主义核心价值观"],
+    answer: "D",
+    tags: ["t-zhidao"],
+    src: "第八十八期真题",
+    ex: "坚持以社会主义核心价值观引领文化建设，是党的二十大报告的重要表述。"
+  },
+  {
+    id: "c071",
+    type: "multi",
+    stem: "党的二十大报告指出，十年来，我们经历了对党和人民事业具有重大现实意义和深远历史意义的三件大事：（　）。",
+    options: [
+      "迎来中国共产党成立一百周年",
+      "中国特色社会主义进入新时代",
+      "社会主义现代化强国建设完成",
+      "完成脱贫攻坚、全面建成小康社会的历史任务，实现第一个百年奋斗目标"
+    ],
+    answer: "ABD",
+    tags: ["t-xinshidai"],
+    src: "第八十八期真题",
+    ex: "三件大事是建党百年、进入新时代、完成脱贫攻坚并实现第一个百年奋斗目标。社会主义现代化强国建设要到本世纪中叶，尚未完成。"
+  },
+  {
+    id: "c072",
+    type: "multi",
+    stem: "发展社会主义民主政治，建设社会主义政治文明，是全面建设小康社会的重要目标。发展社会主义民主政治，最根本的是要坚持（　）的有机统一，走中国特色社会主义政治发展道路。",
+    options: ["党的领导", "科学发展", "人民当家作主", "依法治国"],
+    answer: "ACD",
+    tags: ["t-zhonggang"],
+    src: "第八十八期真题",
+    ex: "党的领导、人民当家作主、依法治国三者的有机统一，是中国特色社会主义政治发展道路的根本。"
+  }
+];
+
+</script>
+<script>
+/* ============================================================
+   题库 · 填空题
+   字段：id / type / stem / blanks / tags / src / ex
+   blanks：每个空 { a: 可接受的完整答案, k: 关键词（命中全部关键词即判对） }
+   ============================================================ */
+
+window.BANK_FILL = [
+  {
+    id: "f001",
+    type: "fill",
+    stem: "习近平总书记在全国政协新年茶话会上指出，人民政协要坚持党的领导、＿＿＿、＿＿＿有机结合，围绕中心、服务大局，充分发挥专门协商机构作用，加强思想政治引领，积极议政建言，更加广泛地＿＿＿、＿＿＿、＿＿＿、＿＿＿。",
+    blanks: [
+      { a: ["统一战线"] },
+      { a: ["协商民主"] },
+      { a: ["凝聚人心"] },
+      { a: ["凝聚共识"] },
+      { a: ["凝聚智慧"] },
+      { a: ["凝聚力量"] }
+    ],
+    tags: ["t-shishi"],
+    src: "真题选讲 · 第八十九期 / 题型专练",
+    ex: "党的领导、统一战线、协商民主三者有机结合，进而广泛凝聚人心、共识、智慧、力量——六空顺序不可调换。"
+  },
+  {
+    id: "f002",
+    type: "fill",
+    stem: "人类命运共同体这一全球价值观包含相互依存的国际权力观、＿＿＿、＿＿＿、＿＿＿。",
+    blanks: [
+      { a: ["共同利益观"] },
+      { a: ["可持续发展观", "可持续的发展观"] },
+      { a: ["全球治理观"] }
+    ],
+    tags: ["t-shishi"],
+    src: "真题选讲 · 第八十八期 / 题型专练",
+    ex: "人类命运共同体的“四观”：相互依存的国际权力观、共同利益观、可持续发展观、全球治理观。"
+  },
+  {
+    id: "f003",
+    type: "fill",
+    stem: "党的二十大报告指出，全面从严治党是党＿＿＿、＿＿＿的必由之路。",
+    blanks: [
+      { a: ["永葆生机活力", "永葆生机与活力"] },
+      { a: ["走好新的赶考之路", "走好新的赶考路"] }
+    ],
+    tags: ["t-xinshidai"],
+    src: "真题选讲 · 第八十七期 / 题型专练",
+    ex: "二十大报告：全面从严治党是党永葆生机活力、走好新的赶考之路的必由之路。顺序不可调换。"
+  },
+  {
+    id: "f004",
+    type: "fill",
+    stem: "在 2026 年 3 月十四届全国人大四次会议上，《政府工作报告》在对“十五五”规划纲要草案的说明中，将重大战略任务归纳为突出＿＿＿，突出＿＿＿，突出＿＿＿，突出＿＿＿。",
+    blanks: [
+      { a: ["推动高质量发展"] },
+      { a: ["做强国内大循环"] },
+      { a: ["推进全体人民共同富裕"] },
+      { a: ["统筹发展和安全"] }
+    ],
+    tags: ["t-shisiwu"],
+    src: "题型专练",
+    ex: "四个突出：高质量发展、做强国内大循环、推进全体人民共同富裕、统筹发展和安全。一字不差、不可换序。"
+  },
+  {
+    id: "f005",
+    type: "fill",
+    stem: "习近平总书记曾指出，要深入推进党风廉政建设和反腐败斗争，以零容忍态度惩治腐败，构建＿＿＿、＿＿＿、＿＿＿的有效机制。",
+    blanks: [
+      { a: ["不敢腐"] },
+      { a: ["不能腐"] },
+      { a: ["不想腐"] }
+    ],
+    tags: ["t-jilv"],
+    src: "题型专练",
+    ex: "一体推进不敢腐、不能腐、不想腐，三者顺序固定。"
+  },
+  {
+    id: "f006",
+    type: "fill",
+    stem: "中国共产党第二十届中央委员会第四次全体会议强调，“十五五”时期经济社会发展，必须坚持以＿＿＿为中心，以＿＿＿为主题，以＿＿＿为根本动力，以＿＿＿为根本目的，以＿＿＿为根本保障。",
+    blanks: [
+      { a: ["经济建设"] },
+      { a: ["推动高质量发展"] },
+      { a: ["改革创新"] },
+      { a: ["满足人民日益增长的美好生活需要"], k: ["美好生活需要"] },
+      { a: ["全面从严治党"] }
+    ],
+    tags: ["t-shisiwu"],
+    src: "题型专练",
+    ex: "五个“以”：以经济建设为中心、以推动高质量发展为主题、以改革创新为根本动力、以满足人民日益增长的美好生活需要为根本目的、以全面从严治党为根本保障。"
+  },
+  {
+    id: "f007",
+    type: "fill",
+    stem: "中国特色社会主义事业总体布局是＿＿＿建设、＿＿＿建设、＿＿＿建设、＿＿＿建设、生态文明建设“五位一体”。",
+    blanks: [
+      { a: ["经济"] },
+      { a: ["政治"] },
+      { a: ["文化"] },
+      { a: ["社会"] }
+    ],
+    tags: ["t-zhonggang"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "“五位一体”：经济建设、政治建设、文化建设、社会建设、生态文明建设。"
+  },
+  {
+    id: "f008",
+    type: "fill",
+    stem: "毛泽东思想的“活的灵魂”是＿＿＿、＿＿＿、＿＿＿。",
+    blanks: [
+      { a: ["实事求是"] },
+      { a: ["群众路线"] },
+      { a: ["独立自主"] }
+    ],
+    tags: ["t-zhidao"],
+    src: "题型专练",
+    ex: "实事求是、群众路线、独立自主构成毛泽东思想活的灵魂，三者顺序固定。"
+  },
+  {
+    id: "f009",
+    type: "fill",
+    stem: "党的二十大报告指出，必须更好发挥法治＿＿＿、＿＿＿、＿＿＿的保障作用，在法治轨道上全面建设社会主义现代化国家。",
+    blanks: [
+      { a: ["固根本"] },
+      { a: ["稳预期"] },
+      { a: ["利长远"] }
+    ],
+    tags: ["t-xinshidai"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "法治固根本、稳预期、利长远——六个字概括法治的保障作用。"
+  },
+  {
+    id: "f010",
+    type: "fill",
+    stem: "“四风”是指＿＿＿、＿＿＿、＿＿＿、＿＿＿。",
+    blanks: [
+      { a: ["形式主义"] },
+      { a: ["官僚主义"] },
+      { a: ["享乐主义"] },
+      { a: ["奢靡之风"] }
+    ],
+    tags: ["t-jilv"],
+    src: "题型专练",
+    ex: "“四风”为形式主义、官僚主义、享乐主义、奢靡之风，前三者是“主义”，第四项是“之风”，不可写成“奢靡主义”。"
+  },
+  {
+    id: "f011",
+    type: "fill",
+    stem: "党章规定，党的组织系统是由＿＿＿、＿＿＿、＿＿＿组成的。",
+    blanks: [
+      { a: ["中央组织"] },
+      { a: ["地方组织"] },
+      { a: ["基层组织"] }
+    ],
+    tags: ["t-zuzhi"],
+    src: "题型专练 / 第八十八期真题",
+    ex: "党的组织系统由中央组织、地方组织、基层组织三个层级构成。"
+  },
+  {
+    id: "f012",
+    type: "fill",
+    stem: "发展党员，必须把政治标准放在首位，经过党的支部，坚持＿＿＿的原则。",
+    blanks: [
+      { a: ["个别吸收"] }
+    ],
+    tags: ["t-chengxu"],
+    src: "题型专练",
+    ex: "党章与《发展党员工作细则》均规定：坚持个别吸收原则，成熟一个、发展一个。"
+  },
+  {
+    id: "f013",
+    type: "fill",
+    stem: "在组织工作过程中，凡属重大问题都要按照＿＿＿、＿＿＿、＿＿＿、＿＿＿原则，由党的委员会集体讨论，作出决定。",
+    blanks: [
+      { a: ["集体领导"] },
+      { a: ["民主集中"] },
+      { a: ["个别酝酿"] },
+      { a: ["会议决定"] }
+    ],
+    tags: ["t-zuzhi"],
+    src: "题型专练",
+    ex: "党委议事决策十六字原则：集体领导、民主集中、个别酝酿、会议决定。"
+  },
+  {
+    id: "f014",
+    type: "fill",
+    stem: "党员干部创造政绩必须坚持＿＿＿、＿＿＿、＿＿＿、＿＿＿的作风。",
+    blanks: [
+      { a: ["敢于担当"] },
+      { a: ["善于作为"] },
+      { a: ["狠抓落实"] },
+      { a: ["久久为功"] }
+    ],
+    tags: ["t-zhengjiguan"],
+    src: "题型专练",
+    ex: "敢于担当、善于作为、狠抓落实、久久为功——顺序与用字都不可改。"
+  },
+  {
+    id: "f015",
+    type: "fill",
+    stem: "党的二十大报告指出，十年来，我们经历了对党和人民事业具有重大现实意义和深远历史意义的三件大事：＿＿＿、＿＿＿、＿＿＿。",
+    blanks: [
+      { a: ["迎来中国共产党成立一百周年"], k: ["一百周年"] },
+      { a: ["中国特色社会主义进入新时代"], k: ["中国特色社会主义", "新时代"] },
+      { a: ["完成脱贫攻坚、全面建成小康社会的历史任务，实现第一个百年奋斗目标"], k: ["脱贫攻坚", "小康社会", "第一个百年"] }
+    ],
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "三件大事：建党一百周年、中国特色社会主义进入新时代、完成脱贫攻坚并实现第一个百年奋斗目标。"
+  },
+  {
+    id: "f016",
+    type: "fill",
+    stem: "坚持走中国特色社会主义政治发展道路，全面发展＿＿＿，社会主义民主政治制度化、规范化、程序化全面推进。",
+    blanks: [
+      { a: ["全过程人民民主"] }
+    ],
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "全过程人民民主是社会主义民主政治的本质属性。"
+  },
+  {
+    id: "f017",
+    type: "fill",
+    stem: "天津大学“新三步走”战略中第三步是：到 2045 年（建校 150 周年），办学主要指标和声誉进入全球前一百，全面建成＿＿＿、＿＿＿、＿＿＿的社会主义大学。",
+    blanks: [
+      { a: ["中国特色"] },
+      { a: ["世界一流"] },
+      { a: ["天大品格"] }
+    ],
+    tags: ["t-xiaoqing"],
+    src: "题型专练",
+    ex: "“中国特色、世界一流、天大品格”是天津大学“新三步走”第三步的目标表述，顺序固定。"
+  },
+  {
+    id: "f018",
+    type: "fill",
+    stem: "习近平总书记在给天津大学全体师生的回信中强调，新起点上，希望你们坚持以新时代中国特色社会主义思想为指导，聚焦＿＿＿，深化教学科研改革，加强＿＿＿，提高人才培养质量，更好服务经济社会发展，为建设＿＿＿、推进＿＿＿作出新的贡献。",
+    blanks: [
+      { a: ["国家重大战略需求"] },
+      { a: ["基础研究和科技攻关"], k: ["基础研究", "科技攻关"] },
+      { a: ["教育强国科技强国", "教育强国、科技强国"], k: ["教育强国", "科技强国"] },
+      { a: ["中国式现代化"] }
+    ],
+    tags: ["t-xiaoqing"],
+    src: "题型专练",
+    ex: "回信中四个要点依次为：聚焦国家重大战略需求、加强基础研究和科技攻关、建设教育强国科技强国、推进中国式现代化。"
+  },
+  {
+    id: "f019",
+    type: "fill",
+    stem: "党的二十大报告指出，坚持把发展经济的着力点放在＿＿＿上，推进新型＿＿＿，加快建设＿＿＿、＿＿＿、航天强国、交通强国、网络强国、＿＿＿。",
+    blanks: [
+      { a: ["实体经济"] },
+      { a: ["工业化"] },
+      { a: ["制造强国"] },
+      { a: ["质量强国"] },
+      { a: ["数字中国"] }
+    ],
+    tags: ["t-xinshidai"],
+    src: "题型专练",
+    ex: "着力点放在实体经济上，推进新型工业化；强国序列中“数字中国”不是“数字强国”，注意用字。"
+  },
+  {
+    id: "f020",
+    type: "fill",
+    stem: "衡量政绩不能只看经济增长的速度与规模，更要看发展的＿＿＿与＿＿＿。",
+    blanks: [
+      { a: ["含金量"] },
+      { a: ["含绿量"] }
+    ],
+    tags: ["t-zhengjiguan"],
+    src: "题型专练",
+    ex: "“含金量”讲质量效益，“含绿量”讲生态底色，二者共同衡量发展成色。"
+  },
+  {
+    id: "f021",
+    type: "fill",
+    stem: "＿＿＿，立党为公，执政为民是我们党同一切剥削阶级政党的根本区别。",
+    blanks: [
+      { a: ["全心全意为人民服务"] }
+    ],
+    tags: ["t-zhonggang"],
+    src: "题型专练",
+    ex: "全心全意为人民服务是党的根本宗旨，也是党区别于一切剥削阶级政党的根本标志。"
+  },
+  {
+    id: "f022",
+    type: "fill",
+    stem: "习近平总书记在党的群众路线教育实践活动工作会议上指出：“我们必须看到，面对世情、国情、党情的深刻变化，全党要积极克服＿＿＿、＿＿＿、＿＿＿、＿＿＿。”",
+    blanks: [
+      { a: ["精神懈怠危险"] },
+      { a: ["能力不足危险"] },
+      { a: ["脱离群众危险"] },
+      { a: ["消极腐败危险"] }
+    ],
+    tags: ["t-jilv"],
+    src: "第八十八期真题",
+    ex: "“四大危险”：精神懈怠、能力不足、脱离群众、消极腐败，四项都带“危险”二字。"
+  },
+  {
+    id: "f023",
+    type: "fill",
+    stem: "改革开放以来，天津大学首倡“＿＿＿、＿＿＿、＿＿＿、＿＿＿”的办学思路，深化高等工程教育改革，聚焦国家重大战略需求、聚焦世界科技发展前沿，培养了 30 万高层次人才，为国家建设发展提供了有力支撑。",
+    blanks: [
+      { a: ["综合性"] },
+      { a: ["研究型"] },
+      { a: ["开放式"] },
+      { a: ["国际化"] }
+    ],
+    tags: ["t-xiaoqing"],
+    src: "第八十八期真题",
+    ex: "天津大学首倡“综合性、研究型、开放式、国际化”的办学思路，四词顺序固定。"
+  },
+  {
+    id: "f024",
+    type: "fill",
+    stem: "习近平总书记指出，我们要随时随地倾听人民呼声、回应人民期待，保证人民＿＿＿、＿＿＿权利，维护社会公平正义，在学有所教、劳有所得、病有所医、老有所养、住有所居上持续取得新进展。",
+    blanks: [
+      { a: ["平等参与"] },
+      { a: ["平等发展"] }
+    ],
+    tags: ["t-zhonggang"],
+    src: "第八十八期真题",
+    ex: "保证人民平等参与、平等发展权利，是保障人民主体地位的重要表述。"
+  },
+  {
+    id: "f025",
+    type: "fill",
+    stem: "2026 年是我国“十五五”规划开局之年，第十四届全国人民代表大会第四次会议审议通过的政府工作报告，明确了 2026 年我国经济社会发展的核心预期目标，其中 2026 年国内生产总值增长预期目标为＿＿＿。",
+    blanks: [
+      { a: ["4.5%—5%", "4.5%-5%", "4.5%~5%", "4.5％—5％"], k: ["4.5", "5"] }
+    ],
+    tags: ["t-shisiwu"],
+    src: "第八十八期真题 · 附加题",
+    ex: "2026 年国内生产总值增长预期目标为 4.5%—5%，作答时区间两端的数字与百分号都不能少。"
+  },
+  {
+    id: "f026",
+    type: "fill",
+    stem: "2026 年 3 月 12 日下午，十四届全国人大四次会议表决通过了《中华人民共和国＿＿＿》。这是我国继民法典之后，第二部以“法典”命名的法律，意味着我国生态环境保护开启了“法典化”时代。",
+    blanks: [
+      { a: ["生态环境法典"] }
+    ],
+    tags: ["t-shisiwu"],
+    src: "第八十八期真题 · 附加题",
+    ex: "《中华人民共和国生态环境法典》是继民法典之后我国第二部以“法典”命名的法律。"
+  }
+];
+
+</script>
+<script>
+/* ============================================================
+   刷题核心：题库索引、判分、组卷、本地存储
+   ============================================================ */
+
+(function () {
+  var CHOICE = window.BANK_CHOICE || [];
+  var FILL = window.BANK_FILL || [];
+  var ALL = CHOICE.concat(FILL);
+
+  var TAGS = window.QUIZ_TAGS || [];
+  var GROUPS = window.QUIZ_GROUPS || [];
+
+  var TAG_MAP = {};
+  TAGS.forEach(function (t) { TAG_MAP[t.id] = t; });
+  var GROUP_MAP = {};
+  GROUPS.forEach(function (g) { GROUP_MAP[g.id] = g; });
+
+  var INDEX = {};
+  ALL.forEach(function (q) { INDEX[q.id] = q; });
+
+  var LS_KEY = "tddx-quiz-v1";
+
+  /* ---------------- 存储 ---------------- */
+
+  var DEFAULTS = {
+    theme: "light",
+    marked: [],
+    excluded: [],
+    wrong: [],
+    records: [],
+    paper: null
+  };
+
+  function load() {
+    var raw = null;
+    try { raw = window.localStorage.getItem(LS_KEY); } catch (e) { raw = null; }
+    var data = {};
+    if (raw) {
+      try { data = JSON.parse(raw) || {}; } catch (e) { data = {}; }
+    }
+    var state = {};
+    Object.keys(DEFAULTS).forEach(function (k) {
+      state[k] = data[k] === undefined ? DEFAULTS[k] : data[k];
+    });
+    if (!Array.isArray(state.marked)) state.marked = [];
+    if (!Array.isArray(state.excluded)) state.excluded = [];
+    if (!Array.isArray(state.wrong)) state.wrong = [];
+    if (!Array.isArray(state.records)) state.records = [];
+    return state;
+  }
+
+  var store = load();
+
+  function save() {
+    try {
+      window.localStorage.setItem(LS_KEY, JSON.stringify(store));
+    } catch (e) {
+      /* 隐私模式下不可写时静默降级，功能仍可用 */
+    }
+  }
+
+  /* ---------------- 工具 ---------------- */
+
+  function shuffle(list) {
+    var arr = list.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+
+  function uniq(list) {
+    var seen = {};
+    var out = [];
+    list.forEach(function (x) {
+      if (!seen[x]) { seen[x] = 1; out.push(x); }
+    });
+    return out;
+  }
+
+  function tagOf(id) { return TAG_MAP[id] || { id: id, name: id, group: "" }; }
+
+  function tagSelectors(q) {
+    return (q.tags || []).map(tagOf);
+  }
+
+  /* 填空答案归一化：去空格与标点、统一全半角、统一破折号 */
+  function normalize(str) {
+    if (str === null || str === undefined) return "";
+    return String(str)
+      .replace(/\u3000/g, " ")
+      .replace(/[\s]+/g, "")
+      .replace(/[\u201c\u201d\u2018\u2019"'《》〈〉【】（）()［］\[\]、，。；：！？,.;:!?·…~～]/g, "")
+      .replace(/[—–－−]/g, "-")
+      .replace(/％/g, "%")
+      .replace(/．/g, ".")
+      .replace(/Ａ|Ｂ|Ｃ|Ｄ/g, function (m) { return m.toLowerCase(); })
+      .toLowerCase();
+  }
+
+  function checkBlank(value, blank) {
+    var got = normalize(value);
+    if (!got) return false;
+    var accepted = blank.a || [];
+    for (var i = 0; i < accepted.length; i++) {
+      if (normalize(accepted[i]) === got) return true;
+    }
+    if (blank.k && blank.k.length) {
+      return blank.k.every(function (kw) { return got.indexOf(normalize(kw)) !== -1; });
+    }
+    return false;
+  }
+
+  function maxScore(q) {
+    if (q.type === "single") return 1;
+    if (q.type === "multi") return 2;
+    return (q.blanks || []).length * 0.5;
+  }
+
+  function isAnswered(q, ans) {
+    if (q.type === "single" || q.type === "multi") {
+      return Array.isArray(ans) ? ans.length > 0 : !!ans;
+    }
+    if (!Array.isArray(ans)) return false;
+    return ans.some(function (v) { return String(v || "").trim() !== ""; });
+  }
+
+  /* 判分：返回 {status, score, max} */
+  function gradeQuestion(q, ans, amend) {
+    var max = maxScore(q);
+    var answered = isAnswered(q, ans);
+    if (!answered) {
+      /* 未作答一律计为答错：包括直接点「显示答案」跳过的题 */
+      return { status: "wrong", score: 0, max: max, blank: true };
+    }
+    var score = 0;
+    var status = "wrong";
+
+    if (q.type === "single") {
+      if (ans === q.answer) { score = 1; status = "correct"; }
+    } else if (q.type === "multi") {
+      var picked = Array.isArray(ans) ? uniq(ans) : [];
+      var right = q.answer.split("");
+      var hitAll = picked.every(function (x) { return right.indexOf(x) !== -1; });
+      if (hitAll && picked.length === right.length) { score = 2; status = "correct"; }
+      else if (hitAll) { score = 1; status = "partial"; }
+      else { score = 0; status = "wrong"; }
+    } else {
+      var blanks = q.blanks || [];
+      var vals = Array.isArray(ans) ? ans : [];
+      var rightCount = 0;
+      blanks.forEach(function (b, i) {
+        if (checkBlank(vals[i], b)) rightCount++;
+      });
+      score = rightCount * 0.5;
+      if (rightCount === blanks.length) { status = "correct"; }
+      else if (rightCount > 0) { status = "partial"; }
+      else { status = "wrong"; }
+    }
+
+    if (amend && status !== "correct") {
+      return { status: "correct", score: max, max: max, amended: true };
+    }
+    return { status: status, score: score, max: max };
+  }
+
+  /* ---------------- 组卷 ---------------- */
+
+  function availablePool() {
+    return ALL.filter(function (q) { return store.excluded.indexOf(q.id) === -1; });
+  }
+
+  function pick(list, n) {
+    return shuffle(list).slice(0, n).map(function (q) { return q.id; });
+  }
+
+  function newPaper(mode, opts) {
+    opts = opts || {};
+    var pool = availablePool();
+    var qids = [];
+    var label = "";
+
+    if (mode === "exam") {
+      var singles = pool.filter(function (q) { return q.type === "single"; });
+      var multis = pool.filter(function (q) { return q.type === "multi"; });
+      var fills = pool.filter(function (q) { return q.type === "fill"; });
+      qids = pick(singles, 20).concat(pick(multis, 5)).concat(pick(fills, 3));
+      /* 按「单选—多选—填空」的卷面顺序排列 */
+      label = "模拟试卷";
+    } else if (mode === "practice") {
+      qids = pick(pool, Math.min(opts.count || 30, pool.length));
+      label = "即时刷题";
+    } else if (mode === "tag") {
+      var tags = opts.tags || [];
+      var type = opts.type || "all";
+      var filtered = pool.filter(function (q) {
+        if (type !== "all" && q.type !== type) return false;
+        if (!tags.length) return true;
+        return (q.tags || []).some(function (t) { return tags.indexOf(t) !== -1; });
+      });
+      qids = pick(filtered, Math.min(opts.count || 30, filtered.length));
+      var names = tags.map(function (id) { return tagOf(id).name; });
+      label = names.length ? ("分类练习 · " + names.join(" / ")) : ("分类练习 · " + tagNameOfType(type));
+    } else if (mode === "wrong") {
+      var ids = store.wrong.map(function (w) { return w.id; }).filter(function (id) {
+        return INDEX[id] && store.excluded.indexOf(id) === -1;
+      });
+      qids = shuffle(uniq(ids));
+      label = "错题重练";
+    }
+
+    if (!qids.length) return null;
+
+    var answers = {};
+    var checked = {};
+    qids.forEach(function (id) {
+      var q = INDEX[id];
+      answers[id] = q.type === "fill"
+        ? (q.blanks || []).map(function () { return ""; })
+        : (q.type === "multi" ? [] : "");
+    });
+
+    var paper = {
+      mode: mode,
+      label: label,
+      qids: qids,
+      answers: answers,
+      checked: checked,
+      amend: {},
+      index: 0,
+      created: Date.now(),
+      submitted: false,
+      review: false,
+      filter: { tags: opts.tags || [], type: opts.type || "all" }
+    };
+    store.paper = paper;
+    save();
+    return paper;
+  }
+
+  function tagNameOfType(type) {
+    if (type === "single") return "单选题";
+    if (type === "multi") return "多选题";
+    if (type === "fill") return "填空题";
+    return "全部题型";
+  }
+
+  function clearPaper() {
+    store.paper = null;
+    save();
+  }
+
+  /* ---------------- 记录 ---------------- */
+
+  function markWrong(id) {
+    var found = null;
+    store.wrong.forEach(function (w) { if (w.id === id) found = w; });
+    if (found) {
+      found.n = (found.n || 1) + 1;
+      found.ts = Date.now();
+    } else {
+      store.wrong.push({ id: id, n: 1, ts: Date.now() });
+    }
+  }
+
+  function removeWrong(id) {
+    store.wrong = store.wrong.filter(function (w) { return w.id !== id; });
+  }
+
+  function toggleMark(id) {
+    var i = store.marked.indexOf(id);
+    if (i === -1) store.marked.push(id); else store.marked.splice(i, 1);
+    save();
+    return i === -1;
+  }
+
+  function toggleExclude(id) {
+    var i = store.excluded.indexOf(id);
+    if (i === -1) store.excluded.push(id); else store.excluded.splice(i, 1);
+    save();
+    return i === -1;
+  }
+
+  function summarize(paper) {
+    var total = 0, max = 0, correct = 0, wrong = 0, partial = 0, blank = 0;
+    var tagAgg = {};
+    paper.qids.forEach(function (id) {
+      var q = INDEX[id];
+      var r = gradeQuestion(q, paper.answers[id], paper.amend[id]);
+      total += r.score;
+      max += r.max;
+      if (r.status === "correct") correct++;
+      else if (r.status === "partial") partial++;
+      else if (r.status === "wrong") wrong++;
+      else blank++;
+      (q.tags || []).forEach(function (t) {
+        if (!tagAgg[t]) tagAgg[t] = { right: 0, all: 0 };
+        tagAgg[t].all++;
+        if (r.status === "correct" || r.status === "partial") tagAgg[t].right++;
+      });
+    });
+    return {
+      score: Math.round(total * 10) / 10,
+      max: Math.round(max * 10) / 10,
+      correct: correct,
+      partial: partial,
+      wrong: wrong,
+      blank: blank,
+      count: paper.qids.length,
+      tagAgg: tagAgg
+    };
+  }
+
+  function recordResult(paper) {
+    var s = summarize(paper);
+    store.records.unshift({
+      ts: Date.now(),
+      label: paper.label,
+      mode: paper.mode,
+      score: s.score,
+      max: s.max,
+      count: s.count,
+      correct: s.correct
+    });
+    store.records = store.records.slice(0, 40);
+    save();
+  }
+
+  /* ---------------- 统计 ---------------- */
+
+  function counts() {
+    var c = { single: 0, multi: 0, fill: 0, total: ALL.length, tags: {} };
+    ALL.forEach(function (q) {
+      c[q.type]++;
+      (q.tags || []).forEach(function (t) { c.tags[t] = (c.tags[t] || 0) + 1; });
+    });
+    return c;
+  }
+
+  function tagCount(id) {
+    if (!id) return 0;
+    return ALL.filter(function (q) { return (q.tags || []).indexOf(id) !== -1; }).length;
+  }
+
+  window.QUIZ = {
+    all: ALL,
+    byId: function (id) { return INDEX[id]; },
+    tagOf: tagOf,
+    tagSelectors: tagSelectors,
+    groupOf: function (id) { return GROUP_MAP[id] || { id: id, name: id, tone: "" }; },
+    tags: TAGS,
+    groups: GROUPS,
+    store: store,
+    save: save,
+    shuffle: shuffle,
+    normalize: normalize,
+    checkBlank: checkBlank,
+    maxScore: maxScore,
+    isAnswered: isAnswered,
+    grade: gradeQuestion,
+    newPaper: newPaper,
+    clearPaper: clearPaper,
+    summarize: summarize,
+    recordResult: recordResult,
+    markWrong: markWrong,
+    removeWrong: removeWrong,
+    toggleMark: toggleMark,
+    toggleExclude: toggleExclude,
+    counts: counts,
+    tagCount: tagCount,
+    isMarked: function (id) { return store.marked.indexOf(id) !== -1; },
+    isExcluded: function (id) { return store.excluded.indexOf(id) !== -1; },
+    lastResult: null
+  };
+})();
+
+</script>
+<script>
+/* ============================================================
+   界面渲染与交互
+   ============================================================ */
+
+(function () {
+  var Q = window.QUIZ;
+  var META = window.QUIZ_META;
+  var CHANGELOG = window.QUIZ_CHANGELOG || [];
+  var navEl = document.getElementById("nav");
+  var viewEl = document.getElementById("view");
+  var titleEl = document.getElementById("pageTitle");
+  var toastEl = document.getElementById("toast");
+
+  var LETTERS = "ABCDEFGH";
+  var ui = {
+    view: "home",
+    search: "",
+    filterTags: [],
+    filterType: "all",
+    filterState: "all",
+    tagSel: [],
+    tagType: "all"
+  };
+
+  /* ---------------- 基础工具 ---------------- */
+
+  function esc(s) {
+    return String(s === undefined || s === null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function tagHtml(id, active) {
+    var t = Q.tagOf(id);
+    var g = Q.groupOf(t.group);
+    return '<span class="tag' + (active ? " is-active" : "") + '" data-tone="' +
+      esc(g.tone) + '" data-tag="' + esc(id) + '">' + esc(t.name) + "</span>";
+  }
+
+  function tagButtonHtml(id, active) {
+    var t = Q.tagOf(id);
+    var g = Q.groupOf(t.group);
+    return '<button type="button" class="tag tag-button' + (active ? " is-active" : "") +
+      '" data-tone="' + esc(g.tone) + '" data-action="toggle-filter-tag" data-tag="' + esc(id) + '">' +
+      esc(t.name) + "</button>";
+  }
+
+  function typeBadge(type) {
+    if (type === "multi") return '<span class="type-badge multi">多选题</span>';
+    if (type === "fill") return '<span class="type-badge fill">填空题</span>';
+    return '<span class="type-badge">单选题</span>';
+  }
+
+  function answerText(q) {
+    if (q.type === "fill") {
+      return (q.blanks || []).map(function (b) { return b.a[0]; }).join(" / ");
+    }
+    return q.answer.split("").join("、");
+  }
+
+  function stemHtml(q) {
+    if (q.type !== "fill") return esc(q.stem);
+    var parts = q.stem.split(/[_＿]{2,}/g);
+    var html = "";
+    for (var i = 0; i < parts.length; i++) {
+      html += esc(parts[i]);
+      if (i < parts.length - 1) {
+        html += '<span class="blankslot">（' + (i + 1) + "）</span>";
+      }
+    }
+    return html;
+  }
+
+  function toast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    window.clearTimeout(toast._t);
+    toast._t = window.setTimeout(function () { toastEl.classList.remove("show"); }, 1900);
+  }
+
+  function pct(a, b) { return b ? Math.round((a / b) * 100) : 0; }
+
+  /* ---------------- 顶栏 ---------------- */
+
+  var NAV = [
+    { view: "home", label: "首页" },
+    { act: "exam", label: "模拟试卷" },
+    { act: "practice", label: "即时刷题" },
+    { view: "tagselect", label: "分类练习" },
+    { view: "bank", label: "查看题库" },
+    { view: "marked", label: "收藏栏" },
+    { view: "excluded", label: "屏蔽题目" },
+    { view: "wrong", label: "历史错题" },
+    { view: "changelog", label: "更新日志" },
+    { act: "theme", label: "夜间模式" },
+    { act: "submit", label: "交卷", primary: true }
+  ];
+
+  function renderNav() {
+    var paper = Q.store.paper;
+    var items = NAV.map(function (n) {
+      if (n.act === "submit") {
+        if (!paper || paper.submitted) return "";
+        return '<button type="button" class="nav-btn primary" data-action="submit">交卷</button>';
+      }
+      if (n.act === "theme") {
+        return '<button type="button" class="nav-btn" data-action="theme">夜间模式</button>';
+      }
+      if (n.act) {
+        return '<button type="button" class="nav-btn" data-action="start-' + n.act + '">' + n.label + "</button>";
+      }
+      var cur = ui.view === n.view ? "true" : "false";
+      return '<button type="button" class="nav-btn" aria-current="' + cur + '" data-view="' + n.view + '">' + n.label + "</button>";
+    });
+    navEl.innerHTML = items.join("");
+  }
+
+  /* ---------------- 首页 ---------------- */
+
+  function renderHome() {
+    var c = Q.counts();
+    var wrongCount = Q.store.wrong.length;
+    var markedCount = Q.store.marked.length;
+
+    var hero = '' +
+      '<section class="cover">' +
+        '<div class="cover-main">' +
+          '<div class="cover-eyebrow">第九十一期 · 复习指导与专题训练</div>' +
+          '<h1 class="cover-title">入党申请人<br>结业考试<em>刷题</em></h1>' +
+          '<p class="cover-sub">' + esc(META.source) +
+            '。每道题按题型与事件线打标签，可整套模拟，也可按考点逐个击破。</p>' +
+          '<div class="cover-stats">' +
+            '<div class="stat"><span class="stat-num">' + c.total + '</span><span class="stat-label">题库总量</span></div>' +
+            '<div class="stat"><span class="stat-num">' + c.single + '</span><span class="stat-label">单选题</span></div>' +
+            '<div class="stat"><span class="stat-num">' + c.multi + '</span><span class="stat-label">多选题</span></div>' +
+            '<div class="stat"><span class="stat-num">' + c.fill + '</span><span class="stat-label">填空题</span></div>' +
+          '</div>' +
+          '<div class="seal-wrap"><div class="seal">天津大学<br>学生党校<br>第九十一期</div></div>' +
+        '</div>' +
+        '<div class="cover-side">' +
+          '<p class="side-note">题库速览 · 一格一题</p>' +
+          '<div class="mini-card">' +
+            '<div class="mini-card-head"><h3>题库构成</h3><span>' + c.total + ' 题</span></div>' +
+            '<div class="mini-grid">' + miniGrid(c) + '</div>' +
+            '<p class="side-note" style="margin-top:14px">实心 单选 ' + c.single +
+              ' · 浅色 多选 ' + c.multi + ' · 空心 填空 ' + c.fill + '</p>' +
+          '</div>' +
+        '</div>' +
+      '</section>';
+
+    var modes = '' +
+      '<div class="section-head"><h2 class="section-title">选择练习方式</h2>' +
+        '<p class="section-note">所有练习记录、错题与收藏都保存在本机浏览器</p></div>' +
+      '<div class="mode-grid">' +
+        modeCard("exam", "模拟试卷", "随机抽 20 道单选、5 道多选、3 道填空，整套答完统一结算，按考试口径判分。",
+          "20 单选 · 5 多选 · 3 填空", "整套 " + (Q.store.paper && !Q.store.paper.submitted ? "进行中" : "可开始")) +
+        modeCard("practice", "即时刷题", "随机抽 30 道混合题，答完一题立刻给出判定与解析，适合逐题过一遍。",
+          "30 题 · 即时判定", "可开始") +
+        modeCard("tagselect", "分类练习", "按事件线与考点标签抽题，单选、多选、填空可单独练，也可只练某一段党史。",
+          "按标签 · 最多 30 题", "可开始") +
+        modeCard("wrong", "错题重练", "从历史错题中去重抽题，答完即时反馈，把反复出错的知识点逐个清掉。",
+          wrongCount + " 道错题", wrongCount ? "可开始" : "暂无错题", !wrongCount) +
+      '</div>' +
+      '<div class="chip-row" style="margin-top:14px">' +
+        '<button type="button" class="btn btn-sm" data-view="bank">查看题库</button>' +
+        '<button type="button" class="btn btn-sm" data-view="marked">收藏栏（' + markedCount + '）</button>' +
+        '<button type="button" class="btn btn-sm" data-view="excluded">屏蔽题目（' + Q.store.excluded.length + '）</button>' +
+        '<button type="button" class="btn btn-sm" data-view="wrong">历史错题</button>' +
+        '<button type="button" class="btn btn-sm" data-view="changelog">更新日志</button>' +
+      '</div>';
+
+    var tagSection = '' +
+      '<div class="section-head"><h2 class="section-title">按事件线浏览考点</h2>' +
+        '<p class="section-note">标签体系分 6 大类、20 个考点</p></div>' +
+      '<div class="tag-groups">' +
+        Q.groups.map(function (g) {
+          var tags = Q.tags.filter(function (t) { return t.group === g.id; });
+          if (!tags.length) return "";
+          return '<div class="tag-group-block">' +
+            '<div class="tag-group-head"><span class="tag-group-name">' + esc(g.name) +
+            '</span><span class="tag-group-note">' + esc(g.note) + "</span></div>" +
+            '<div class="chip-row">' + tags.map(function (t) {
+              return '<button type="button" class="tag tag-button" data-tone="' + esc(g.tone) +
+                '" data-action="quick-tag" data-tag="' + esc(t.id) + '">' + esc(t.name) +
+                '<span style="opacity:.6"> ' + Q.tagCount(t.id) + "</span></button>";
+            }).join("") + "</div></div>";
+        }).join("") +
+      '</div>';
+
+    var records = Q.store.records.length ? (
+      '<div class="section-head"><h2 class="section-title">最近练习</h2>' +
+        '<p class="section-note">共 ' + Q.store.records.length + ' 次</p></div>' +
+      '<div class="kv-grid">' + Q.store.records.slice(0, 5).map(function (r) {
+        var d = new Date(r.ts);
+        var mm = String(d.getMonth() + 1);
+        var dd = String(d.getDate());
+        return '<div class="kv"><span class="kv-num">' + r.score + "</span>" +
+          '<span class="kv-label">' + esc(r.label) + " · " + mm + "/" + dd + "</span></div>";
+      }).join("") + "</div>"
+    ) : "";
+
+    return hero + modes + tagSection + records;
+  }
+
+  function miniGrid(c) {
+    var n = c.total;
+    var cells = [];
+    for (var i = 0; i < n; i++) {
+      var cls = "mini-cell";
+      if (i < c.single) cls += " hit";
+      else if (i < c.single + c.multi) cls += " smudge";
+      cells.push('<div class="' + cls + '">' + (i + 1) + "</div>");
+    }
+    return cells.join("");
+  }
+
+  function modeCard(kind, name, desc, metaLeft, metaRight, off) {
+    var action = kind === "tagselect" ? "" : ' data-action="start-' + kind + '"';
+    var viewAttr = kind === "tagselect" ? ' data-view="tagselect"' : "";
+    return '<button type="button" class="mode-card' + (off ? " off" : "") + '"' +
+      (off ? " disabled" : action + viewAttr) + ">" +
+      '<span class="mode-card-top"><span class="mode-name">' + esc(name) + "</span>" +
+      '<span class="mode-mark">' + arrowIcon() + "</span></span>" +
+      '<span class="mode-desc">' + esc(desc) + "</span>" +
+      '<span class="mode-meta"><span>' + esc(metaLeft) + "</span><span>" + esc(metaRight) + "</span></span>" +
+      "</button>";
+  }
+
+  function arrowIcon() {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6">' +
+      '<path d="M5 12h14M13 6l6 6-6 6"></path></svg>';
+  }
+
+  /* ---------------- 分类练习（标签选择） ---------------- */
+
+  function renderTagSelect() {
+    var typeChips = [
+      { id: "all", label: "全部题型" },
+      { id: "single", label: "单选题" },
+      { id: "multi", label: "多选题" },
+      { id: "fill", label: "填空题" }
+    ].map(function (t) {
+      return '<button type="button" class="tag tag-button' + (ui.tagType === t.id ? " is-active" : "") +
+        '" data-action="tag-type" data-type="' + t.id + '">' + t.label + "</button>";
+    }).join("");
+
+    var pool = QQUI_pool(ui.tagSel, ui.tagType);
+
+    var groups = Q.groups.map(function (g) {
+      var tags = Q.tags.filter(function (t) { return t.group === g.id; });
+      return '<div class="tag-group-block">' +
+        '<div class="tag-group-head"><span class="tag-group-name">' + esc(g.name) +
+        '</span><span class="tag-group-note">' + esc(g.note) + "</span></div>" +
+        '<div class="chip-row">' + tags.map(function (t) {
+          var n = Q.tagCount(t.id);
+          return '<button type="button" class="tag tag-button' +
+            (ui.tagSel.indexOf(t.id) !== -1 ? " is-active" : "") +
+            '" data-tone="' + esc(g.tone) + '" data-action="toggle-tag" data-tag="' + esc(t.id) + '">' +
+            esc(t.name) + '<span style="opacity:.6"> ' + n + "</span></button>";
+        }).join("") + "</div></div>";
+    }).join("");
+
+    return '' +
+      '<div class="section-head"><h2 class="section-title">分类练习</h2>' +
+        '<p class="section-note">先选题型，再选事件线；不选标签则为全库随机</p></div>' +
+      '<div class="filter-bar">' +
+        '<div class="filter-line"><span class="filter-label">题型</span>' + typeChips + "</div>" +
+        '<div class="filter-line"><span class="filter-label">已选</span>' +
+          (ui.tagSel.length
+            ? ui.tagSel.map(function (id) { return tagHtml(id, true); }).join("")
+            : '<span class="section-note">未选标签 · 全库随机</span>') +
+          (ui.tagSel.length ? '<button type="button" class="btn btn-sm btn-ghost" data-action="clear-tags">清空</button>' : "") +
+        "</div>" +
+      "</div>" +
+      '<div class="tag-groups">' + groups + "</div>" +
+      '<div class="start-bar">' +
+        '<div class="start-info">当前可抽 <strong>' + pool + "</strong> 题，将随机抽取 " +
+          Math.min(30, pool) + ' 题</div>' +
+        '<button type="button" class="btn btn-solid" data-action="start-tag"' + (pool ? "" : " disabled") +
+          ">开始分类练习</button>" +
+      "</div>";
+  }
+
+  function QQUI_pool(tags, type) {
+    return Q.all.filter(function (q) {
+      if (Q.isExcluded(q.id)) return false;
+      if (type !== "all" && q.type !== type) return false;
+      if (!tags.length) return true;
+      return (q.tags || []).some(function (t) { return tags.indexOf(t) !== -1; });
+    }).length;
+  }
+
+  /* ---------------- 答题视图 ---------------- */
+
+  function renderQuiz() {
+    var paper = Q.store.paper;
+    if (!paper) { ui.view = "home"; return renderHome(); }
+    var idx = Math.min(paper.index, paper.qids.length - 1);
+    paper.index = idx;
+    var qid = paper.qids[idx];
+    var q = Q.byId(qid);
+    var ans = paper.answers[qid];
+    var revealed = paper.submitted || paper.review || !!paper.checked[qid];
+    var res = Q.grade(q, ans, paper.amend[qid]);
+
+    var head = '<div class="sheet-head">' +
+      '<span class="sheet-index">第 ' + pad(idx + 1) + " / " + paper.qids.length + " 题</span>" +
+      typeBadge(q.type) +
+      (q.src ? '<span>' + esc(q.src) + "</span>" : "") +
+      '<span class="spacer"></span>' +
+      Q.tagSelectors(q).map(function (t) { return tagHtml(t.id); }).join("") +
+      (Q.isMarked(qid) ? '<span class="tag is-active" data-tone="amber">已收藏</span>' : "") +
+      "</div>";
+
+    var body = '<h2 class="stem">' + stemHtml(q) + "</h2>";
+
+    if (q.type === "fill") {
+      body += '<div class="fill-grid">' + (q.blanks || []).map(function (b, i) {
+        var v = Array.isArray(ans) ? ans[i] || "" : "";
+        var ok = revealed ? Q.checkBlank(v, b) : null;
+        var cls = "fill-input";
+        var flag = "";
+        if (revealed) {
+          if (v && ok) { cls += " ok"; flag = "对"; }
+          else if (v) {
+            /* 本题部分正确时，答错的空用琥珀色，与整题答错的红区分 */
+            cls += res.status === "partial" ? " half" : " no";
+            flag = "错";
+          } else { cls += res.status === "partial" ? " gap" : " no"; flag = "未填"; }
+        }
+        return '<div class="fill-row"><span class="fill-no">(' + (i + 1) + ')</span>' +
+          '<input class="' + cls + '" type="text" data-action="fill-input" data-qid="' + esc(qid) +
+          '" data-idx="' + i + '" value="' + esc(v) + '" placeholder="填写第 ' + (i + 1) +
+          ' 空的答案"' + (revealed ? " readonly" : "") + ">" +
+          '<span class="fill-flag">' + flag + "</span></div>";
+      }).join("") + "</div>";
+      if (!revealed) {
+        body += '<p class="section-note">按原文用字作答；标点与空格不影响判定，重点长句按关键词判定。</p>';
+      }
+    } else {
+      body += '<div class="options">' + q.options.map(function (opt, i) {
+        var letter = LETTERS.charAt(i);
+        var selected = q.type === "multi"
+          ? (Array.isArray(ans) && ans.indexOf(letter) !== -1)
+          : ans === letter;
+        var isRight = q.answer.indexOf(letter) !== -1;
+        var cls = "option";
+        var optTag = "";
+        if (selected) cls += " selected";
+        if (revealed) {
+          cls += " locked";
+          if (isRight) {
+            if (selected) cls += " correct";
+            else if (q.type === "multi") {
+              cls += " missed";
+              optTag = '<span class="option-tag part">漏选</span>';
+            } else cls += " correct";
+          } else if (selected) cls += " wrong";
+        }
+        return '<button type="button" class="' + cls + '" data-action="option" data-qid="' + esc(qid) +
+          '" data-letter="' + letter + '"' + (revealed ? " data-locked=\"1\"" : "") + ">" +
+          '<span class="option-marker">' + letter + "</span>" +
+          '<span class="option-text">' + esc(opt) + "</span>" + optTag + "</button>";
+      }).join("") + "</div>";
+      if (q.type === "multi" && !revealed) {
+        body += '<div class="chip-row" style="margin:14px 0 4px">' +
+          '<button type="button" class="btn btn-sm btn-solid" data-action="reveal">确认答案</button>' +
+          '<span class="section-note">多选：全对 2 分，漏选 1 分，多选或错选 0 分</span></div>';
+      }
+    }
+
+    var feedback = "";
+    if (revealed) {
+      var verdict = "";
+      if (res.status === "correct") verdict = '<span class="verdict ok">答对 · +' + res.score + " 分</span>";
+      else if (res.status === "partial") verdict = '<span class="verdict part">部分正确 · +' + res.score + " 分</span>";
+      else if (res.status === "wrong" && res.blank) verdict = '<span class="verdict no">未作答 · 按答错计 0 分</span>';
+      else verdict = '<span class="verdict no">答错 · 0 分</span>';
+
+      feedback = '<div class="feedback"><div class="feedback-head">' + verdict +
+        '<span class="answer-line">答案：<strong>' + esc(answerText(q)) + "</strong></span>" +
+        "</div>" +
+        (q.ex ? '<p class="explain">' + esc(q.ex) + "</p>" : "") +
+        (q.type === "fill" && res.status !== "correct" && Q.isAnswered(q, ans) && !paper.amend[qid]
+          ? '<div class="chip-row"><button type="button" class="btn btn-sm" data-action="amend">我答对了，按正确计分</button></div>'
+          : "") +
+        "</div>";
+    }
+
+    var foot = '<div class="sheet-foot">' +
+      '<button type="button" class="btn" data-action="prev"' + (idx === 0 ? " disabled" : "") + ">上一题</button>" +
+      '<button type="button" class="btn" data-action="next"' +
+        (idx === paper.qids.length - 1 ? " disabled" : "") + ">下一题</button>" +
+      '<span class="spacer"></span>' +
+      (revealed ? "" : '<button type="button" class="btn btn-sm" data-action="reveal">显示答案</button>') +
+      '<button type="button" class="btn btn-sm" data-action="mark">' +
+        (Q.isMarked(qid) ? "取消收藏" : "收藏本题") + "</button>" +
+      '<button type="button" class="btn btn-sm" data-action="exclude">' +
+        (Q.isExcluded(qid) ? "取消屏蔽" : "屏蔽本题") + "</button>" +
+      '<button type="button" class="btn btn-sm" data-action="new-paper">重新组卷</button>' +
+      "</div>";
+
+    var sheet = '<article class="sheet">' + head + body + feedback + foot + "</article>";
+
+    return '<div class="quiz-layout">' + sheet + answerCard(paper, revealed) + "</div>";
+  }
+
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+  function answerCard(paper, revealed) {
+    var answered = paper.qids.filter(function (id, i) {
+      return Q.isAnswered(Q.byId(id), paper.answers[id]);
+    }).length;
+
+    var cells = paper.qids.map(function (id, i) {
+      var q = Q.byId(id);
+      var st = "unanswered";
+      var cls = "card-cell";
+      /* 只按「这一题自己」是否看过答案上色，不能借用当前页的判定状态，
+         否则停在某道已判定的题上时，其余未作答的题会被一起判成答错 */
+      var rev = !!paper.submitted || !!paper.review || !!paper.checked[id];
+      if (rev) {
+        var r = Q.grade(q, paper.answers[id], paper.amend[id]);
+        if (r.status === "correct") st = "correct";
+        else if (r.status === "partial") st = "partial";
+        else st = "wrong";
+      } else if (Q.isAnswered(q, paper.answers[id])) {
+        st = "answered";
+      }
+      if (st !== "unanswered") cls += " " + st;
+      if (i === paper.index) cls += " current";
+      return '<button type="button" class="' + cls + '" data-action="jump" data-idx="' + i +
+        '" aria-label="第 ' + (i + 1) + ' 题">' + (i + 1) + "</button>";
+    }).join("");
+
+    var legend = '<div class="legend">' +
+      '<span><i class="cur"></i>当前</span>' +
+      '<span><i class="ans"></i>已答</span>' +
+      '<span><i class="ok"></i>正确</span>' +
+      '<span><i class="part"></i>部分</span>' +
+      '<span><i class="no"></i>错误</span>' +
+      '<span><i class="blank"></i>未答</span></div>';
+
+    var actions = paper.submitted
+      ? '<div class="card-actions">' +
+          '<button type="button" class="btn btn-solid" data-view="result">查看本次结算</button>' +
+          '<button type="button" class="btn" data-action="new-same">重新组卷</button>' +
+          '<button type="button" class="btn" data-action="to-home">回到首页</button>' +
+        "</div>"
+      : '<div class="card-actions">' +
+          '<button type="button" class="btn btn-solid" data-action="submit">交卷结算</button>' +
+          '<button type="button" class="btn" data-action="new-same">重新组卷</button>' +
+        "</div>";
+
+    return '<aside class="card-sheet">' +
+      '<div class="card-sheet-head"><h2>答题卡</h2><span class="count">' + answered + " / " + paper.qids.length + "</span></div>" +
+      '<div class="card-grid">' + cells + "</div>" +
+      '<div class="card-progress"><i style="width:' + pct(answered, paper.qids.length) + '%"></i></div>' +
+      legend + actions +
+      "</aside>";
+  }
+
+  /* ---------------- 结算 ---------------- */
+
+  function renderResult() {
+    var paper = Q.store.paper;
+    if (!paper || !paper.submitted) { ui.view = "home"; return renderHome(); }
+    var s = Q.summarize(paper);
+    var rate = pct(s.score, s.max);
+    var pass = rate >= 60;
+
+    var tagRows = Object.keys(s.tagAgg).map(function (id) {
+      var a = s.tagAgg[id];
+      return { id: id, name: Q.tagOf(id).name, tone: Q.groupOf(Q.tagOf(id).group).tone, right: a.right, all: a.all, rate: pct(a.right, a.all) };
+    }).sort(function (x, y) { return x.rate - y.rate; });
+
+    var breakdown = '<div class="section-head"><h2 class="section-title">考点得分分布</h2>' +
+      '<p class="section-note">按标签统计，从最薄弱的开始</p></div><div class="breakdown">' +
+      tagRows.map(function (r) {
+        return '<div class="bar-row"><span class="bar-name" data-tone="' + esc(r.tone) + '">' + esc(r.name) +
+          '</span><div class="bar-track"><i class="bar-fill' + (r.rate < 60 ? " hot" : "") +
+          '" style="width:' + r.rate + '%"></i></div><span class="bar-val">' +
+          r.right + "/" + r.all + "</span></div>";
+      }).join("") + "</div>";
+
+    var wrongItems = paper.qids.filter(function (id) {
+      var r = Q.grade(Q.byId(id), paper.answers[id], paper.amend[id]);
+      return r.status !== "correct";
+    });
+
+    var reviewList = wrongItems.length ? (
+      '<div class="section-head"><h2 class="section-title">需要回看的题</h2>' +
+        '<p class="section-note">共 ' + wrongItems.length + " 道</p></div>" +
+      '<div class="review-list">' + wrongItems.map(function (id) {
+        var q = Q.byId(id);
+        var r = Q.grade(q, paper.answers[id], paper.amend[id]);
+        var your = q.type === "fill"
+          ? (Array.isArray(paper.answers[id]) ? paper.answers[id].join(" / ") : "")
+          : (Array.isArray(paper.answers[id]) ? paper.answers[id].join("、") : (paper.answers[id] || "未作答"));
+        var stTag = r.status === "partial" ? '<span class="st-tag part">部分正确</span>' :
+          (r.blank ? '<span class="st-tag no">未作答 · 答错</span>' :
+            '<span class="st-tag no">答错</span>');
+        return '<div class="review-item"><p class="review-stem">' + stemHtml(q) + "</p>" +
+          '<div class="review-meta">' + typeBadge(q.type) + stTag +
+          "<span>你的答案：<b>" + esc(your || "未作答") + "</b></span>" +
+          "<span>正确答案：" + esc(answerText(q)) + "</span>" +
+          "<span>" + esc(q.src || "") + "</span></div>" +
+          (q.ex ? '<p class="explain" style="margin-top:8px">' + esc(q.ex) + "</p>" : "") +
+          "</div>";
+      }).join("") + "</div>"
+    ) : '<div class="empty-state"><strong>全部答对</strong>这套卷子没有需要回看的题。</div>';
+
+    return '<section class="result-panel">' +
+      '<div class="result-top">' +
+        '<div class="score-block"><span class="score-num">' + s.score + '</span><span class="score-den">/ ' + s.max + " 分</span></div>" +
+        '<div class="score-side"><h2 class="result-title">' + esc(paper.label) + " · 结算</h2>" +
+          '<p class="result-sub">正确率 ' + rate + "% · " + (pass ? "达到及格线口径（60%）" : "低于及格线口径（60%）") +
+          " · 共 " + s.count + " 题</p>" +
+          '<div class="chip-row" style="margin-top:6px">' +
+            '<button type="button" class="btn btn-sm btn-solid" data-action="review-all">整卷回顾</button>' +
+            '<button type="button" class="btn btn-sm" data-action="new-same">重新组卷</button>' +
+            '<button type="button" class="btn btn-sm" data-view="wrong">历史错题</button>' +
+            '<button type="button" class="btn btn-sm" data-action="to-home">回到首页</button>' +
+          "</div></div>" +
+      "</div>" +
+      '<div class="kv-grid">' +
+        kv(s.correct, "答对", "ok") + kv(s.partial, "部分正确", "part") +
+        kv(s.wrong, "答错", "no") + kv(paper.qids.length, "题量") +
+      "</div>" +
+      breakdown +
+      reviewList +
+      "</section>";
+  }
+
+  function kv(n, label, tone) {
+    return '<div class="kv"><span class="kv-num' + (tone ? " " + tone : "") + '">' + n +
+      '</span><span class="kv-label">' + label + "</span></div>";
+  }
+
+  /* ---------------- 题库 / 列表 ---------------- */
+
+  function filteredBank() {
+    var kw = ui.search.trim();
+    return Q.all.filter(function (q) {
+      if (ui.filterType !== "all" && q.type !== ui.filterType) return false;
+      if (ui.filterTags.length) {
+        var hit = (q.tags || []).some(function (t) { return ui.filterTags.indexOf(t) !== -1; });
+        if (!hit) return false;
+      }
+      if (ui.filterState === "marked" && !Q.isMarked(q.id)) return false;
+      if (ui.filterState === "wrong" && !Q.store.wrong.some(function (w) { return w.id === q.id; })) return false;
+      if (kw) {
+        var hay = q.stem + " " + (q.options || []).join(" ") + " " + (q.src || "") + " " +
+          (q.tags || []).map(function (t) { return Q.tagOf(t).name; }).join(" ");
+        if (hay.indexOf(kw) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderBank() {
+    var list = filteredBank();
+    var typeChips = [
+      { id: "all", label: "全部" }, { id: "single", label: "单选" },
+      { id: "multi", label: "多选" }, { id: "fill", label: "填空" }
+    ].map(function (t) {
+      return '<button type="button" class="tag tag-button' + (ui.filterType === t.id ? " is-active" : "") +
+        '" data-action="filter-type" data-type="' + t.id + '">' + t.label + "</button>";
+    }).join("");
+
+    var stateChips = [
+      { id: "all", label: "全部" }, { id: "marked", label: "已收藏" }, { id: "wrong", label: "错题本内" }
+    ].map(function (t) {
+      return '<button type="button" class="tag tag-button' + (ui.filterState === t.id ? " is-active" : "") +
+        '" data-action="filter-state" data-state="' + t.id + '">' + t.label + "</button>";
+    }).join("");
+
+    var tagChips = Q.groups.map(function (g) {
+      var tags = Q.tags.filter(function (t) { return t.group === g.id; });
+      return tags.map(function (t) {
+        return tagButtonHtml(t.id, ui.filterTags.indexOf(t.id) !== -1);
+      }).join("");
+    }).join("");
+
+    var bar = '<div class="filter-bar">' +
+      '<div class="filter-line">' +
+        '<span class="search-box">' + searchIcon() +
+        '<input type="search" id="bankSearch" placeholder="搜索题干、选项、来源或标签" value="' + esc(ui.search) + '">' +
+        "</span>" +
+      "</div>" +
+      '<div class="filter-line"><span class="filter-label">题型</span>' + typeChips +
+        '<span class="filter-label" style="margin-left:12px">状态</span>' + stateChips + "</div>" +
+      '<div class="filter-line"><span class="filter-label">标签</span><div class="chip-row">' + tagChips + "</div></div>" +
+      "</div>";
+
+    var headLine = '<div class="list-count"><span>共 ' + list.length + " 道（题库总计 " + Q.all.length + " 道）</span>" +
+      (ui.filterTags.length || ui.filterType !== "all" || ui.filterState !== "all" || ui.search
+        ? '<button type="button" class="btn btn-sm btn-ghost" data-action="clear-filter">清空筛选</button>' : "") +
+      "</div>";
+
+    var body = list.length
+      ? '<div class="q-list">' + list.map(function (q) { return qItem(q, "bank"); }).join("") + "</div>"
+      : '<div class="empty-state"><strong>没有匹配的题目</strong>换个关键词，或清空筛选条件再试。</div>';
+
+    return '<div class="section-head"><h2 class="section-title">查看题库</h2>' +
+      '<p class="section-note">题干、答案与解析全部可见</p></div>' + bar + headLine + body;
+  }
+
+  function searchIcon() {
+    return '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">' +
+      '<circle cx="11" cy="11" r="6"></circle><path d="M16 16l4 4"></path></svg>';
+  }
+
+  function qItem(q, ctx) {
+    var opts = q.type === "fill" ? "" :
+      '<div class="q-item-opts">' + q.options.map(function (o, i) {
+        var letter = LETTERS.charAt(i);
+        var right = q.answer.indexOf(letter) !== -1;
+        return "<span>" + letter + ". " + esc(o) + (right ? '　<span class="ans-key">对</span>' : "") + "</span>";
+      }).join("") + "</div>";
+
+    var wrongInfo = Q.store.wrong.filter(function (w) { return w.id === q.id; })[0];
+
+    return '<div class="q-item">' +
+      '<div class="q-item-head"><span class="q-item-id">' + esc(q.id.toUpperCase()) + "</span>" +
+        typeBadge(q.type) +
+        Q.tagSelectors(q).map(function (t) { return tagHtml(t.id); }).join("") +
+        (q.src ? "<span>" + esc(q.src) + "</span>" : "") +
+        (wrongInfo ? '<span class="tag" data-tone="crimson">错 ' + wrongInfo.n + " 次</span>" : "") +
+      "</div>" +
+      '<p class="q-item-stem">' + stemHtml(q) + "</p>" + opts +
+      '<div class="q-item-foot">' +
+        '<span class="ans-key' + (q.type === "fill" ? " fill" : "") + '">答案：' + esc(answerText(q)) + "</span>" +
+        '<span class="spacer" style="flex:1"></span>' +
+        '<button type="button" class="btn btn-sm" data-action="mark" data-qid="' + esc(q.id) + '">' +
+          (Q.isMarked(q.id) ? "取消收藏" : "收藏") + "</button>" +
+        '<button type="button" class="btn btn-sm" data-action="exclude" data-qid="' + esc(q.id) + '">' +
+          (Q.isExcluded(q.id) ? "取消屏蔽" : "屏蔽") + "</button>" +
+      "</div>" +
+      (q.ex ? '<p class="explain" style="margin-top:8px">' + esc(q.ex) + "</p>" : "") +
+      "</div>";
+  }
+
+  function renderMarked() {
+    var list = Q.store.marked.map(function (id) { return Q.byId(id); }).filter(Boolean);
+    return '<div class="section-head"><h2 class="section-title">收藏栏</h2>' +
+      '<p class="section-note">' + list.length + " 道题被标记为重点</p></div>" +
+      (list.length
+        ? '<div class="q-list">' + list.map(function (q) { return qItem(q, "marked"); }).join("") + "</div>"
+        : '<div class="empty-state"><strong>还没有收藏题目</strong>在答题页或题库里点「收藏」，题目就会出现在这里。</div>');
+  }
+
+  function renderExcluded() {
+    var list = Q.store.excluded.map(function (id) { return Q.byId(id); }).filter(Boolean);
+    return '<div class="section-head"><h2 class="section-title">屏蔽题目</h2>' +
+      '<p class="section-note">已屏蔽的题不再出现在任何随机抽题中</p></div>' +
+      (list.length
+        ? '<div class="q-list">' + list.map(function (q) { return qItem(q, "excluded"); }).join("") + "</div>"
+        : '<div class="empty-state"><strong>没有屏蔽任何题目</strong>掌握熟练、不想再抽到的题，可以在题库里屏蔽。</div>');
+  }
+
+  function renderWrong() {
+    var list = Q.store.wrong.map(function (w) {
+      return { q: Q.byId(w.id), n: w.n || 1, ts: w.ts };
+    }).filter(function (x) { return x.q; });
+
+    var head = '<div class="section-head"><h2 class="section-title">历史错题</h2>' +
+      '<p class="section-note">共 ' + list.length + " 道，可一键重练</p></div>";
+
+    if (!list.length) {
+      return head + '<div class="empty-state"><strong>错题本是空的</strong>答错的题会自动进来，练完一次模拟卷就有了。</div>';
+    }
+
+    var tools = '<div class="chip-row" style="margin-bottom:14px">' +
+      '<button type="button" class="btn btn-sm btn-solid" data-action="start-wrong">重练全部错题</button>' +
+      '<button type="button" class="btn btn-sm" data-action="clear-wrong">清空错题本</button>' +
+      "</div>";
+
+    return head + tools + '<div class="q-list">' + list.map(function (x) {
+      var d = new Date(x.ts || Date.now());
+      var item = qItem(x.q, "wrong");
+      return item.replace('<div class="q-item-head">',
+        '<div class="q-item-head"><span class="wrong-meta">错 ' + x.n + " 次 · " +
+        (d.getMonth() + 1) + "/" + d.getDate() + " 记录</span>");
+    }).join("") + "</div>";
+  }
+
+  function renderChangelog() {
+    return '<div class="section-head"><h2 class="section-title">更新日志</h2>' +
+      '<p class="section-note">当前版本 ' + esc(META.version) + " · 构建于 " + esc(META.buildDate) + "</p></div>" +
+      '<div class="log-list">' + CHANGELOG.map(function (log) {
+        return '<div class="log-entry"><div class="log-date">' + esc(log.date) + "</div>" +
+          '<div><h3 class="log-title">' + esc(log.title) + " <span class=\"section-note\">" + esc(log.version) + "</span></h3>" +
+          '<ul class="log-items">' + log.items.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") +
+          "</ul></div></div>";
+      }).join("") + "</div>" +
+      '<div class="footnote"><span>' + esc(META.subtitle) + "</span><span>资料用于复习，考试以当期文件为准</span></div>";
+  }
+
+  /* ---------------- 主渲染 ---------------- */
+
+  var TITLES = {
+    home: "入党申请人结业考试刷题",
+    tagselect: "分类练习",
+    quiz: "答题",
+    result: "结算",
+    bank: "查看题库",
+    marked: "收藏栏",
+    excluded: "屏蔽题目",
+    wrong: "历史错题",
+    changelog: "更新日志"
+  };
+
+  function render(keepScroll) {
+    var paper = Q.store.paper;
+    if (ui.view === "quiz" && !paper) ui.view = "home";
+    if (ui.view === "result" && (!paper || !paper.submitted)) ui.view = "home";
+
+    var html = "";
+    switch (ui.view) {
+      case "tagselect": html = renderTagSelect(); break;
+      case "quiz": html = renderQuiz(); break;
+      case "result": html = renderResult(); break;
+      case "bank": html = renderBank(); break;
+      case "marked": html = renderMarked(); break;
+      case "excluded": html = renderExcluded(); break;
+      case "wrong": html = renderWrong(); break;
+      case "changelog": html = renderChangelog(); break;
+      default: ui.view = "home"; html = renderHome();
+    }
+    var y = keepScroll ? window.scrollY : 0;
+    viewEl.innerHTML = html;
+    titleEl.textContent = TITLES[ui.view] || TITLES.home;
+    renderNav();
+    if (keepScroll) window.scrollTo(0, y);
+    applyTheme();
+  }
+
+  function applyTheme() {
+    document.documentElement.setAttribute("data-theme", Q.store.theme === "dark" ? "dark" : "light");
+  }
+
+  /* ---------------- 动作 ---------------- */
+
+  function startPaper(mode) {
+    var paper = Q.newPaper(mode);
+    if (!paper) { toast("没有可用的题目，请先取消部分屏蔽"); return; }
+    if (mode === "wrong" && !paper.qids.length) { toast("错题本里还没有题"); return; }
+    ui.view = "quiz";
+    render();
+    toast("已生成「" + paper.label + "」共 " + paper.qids.length + " 题");
+  }
+
+  function submitPaper() {
+    var paper = Q.store.paper;
+    if (!paper) return;
+    if (!paper.qids.some(function (id) { return Q.isAnswered(Q.byId(id), paper.answers[id]); })) {
+      toast("还没有作答，先答几题再交卷");
+      return;
+    }
+    paper.submitted = true;
+    paper.review = false;
+    /* 答错的题写入错题本 */
+    paper.qids.forEach(function (id) {
+      var q = Q.byId(id);
+      var r = Q.grade(q, paper.answers[id], paper.amend[id]);
+      if (r.status === "wrong" || r.status === "partial") Q.markWrong(id);
+    });
+    Q.recordResult(paper);
+    Q.save();
+    ui.view = "result";
+    render();
+    toast("已交卷，查看结算");
+  }
+
+  function revealCurrent() {
+    var paper = Q.store.paper;
+    if (!paper) return;
+    var qid = paper.qids[paper.index];
+    paper.checked[qid] = true;
+    var r = Q.grade(Q.byId(qid), paper.answers[qid], paper.amend[qid]);
+    if (r.status === "wrong" || r.status === "partial") {
+      Q.markWrong(qid);
+      Q.save();
+    }
+    render(true);
+  }
+
+  function go(delta) {
+    var paper = Q.store.paper;
+    if (!paper) return;
+    var next = paper.index + delta;
+    if (next < 0 || next >= paper.qids.length) return;
+    paper.index = next;
+    Q.save();
+    render(true);
+  }
+
+  function jumpTo(i) {
+    var paper = Q.store.paper;
+    if (!paper) return;
+    paper.index = i;
+    Q.save();
+    render(true);
+  }
+
+  /* ---------------- 事件绑定 ---------------- */
+
+  document.addEventListener("click", function (ev) {
+    var el = ev.target.closest ? ev.target.closest("[data-action],[data-view]") : null;
+    if (!el) return;
+    var action = el.getAttribute("data-action");
+    var view = el.getAttribute("data-view");
+    var paper = Q.store.paper;
+
+    if (view) {
+      ui.view = view;
+      render();
+      return;
+    }
+
+    switch (action) {
+      case "start-exam": startPaper("exam"); break;
+      case "start-practice": startPaper("practice"); break;
+      case "start-wrong": startPaper("wrong"); break;
+      case "start-tag":
+        var p = Q.newPaper("tag", { tags: ui.tagSel, type: ui.tagType });
+        if (!p) { toast("该条件下没有题目"); return; }
+        ui.view = "quiz";
+        render();
+        toast("已生成分类练习 " + p.qids.length + " 题");
+        break;
+      case "submit": submitPaper(); break;
+      case "new-paper":
+        if (paper) startPaper(paper.mode === "tag" ? "tag" : paper.mode);
+        break;
+      case "new-same":
+        if (paper) {
+          if (paper.mode === "tag") {
+            Q.newPaper("tag", { tags: paper.filter.tags, type: paper.filter.type });
+            ui.view = "quiz"; render();
+          } else {
+            startPaper(paper.mode);
+          }
+        }
+        break;
+      case "to-home": ui.view = "home"; render(); break;
+      case "review-all":
+        if (paper) { paper.review = true; ui.view = "quiz"; render(); }
+        break;
+      case "prev": go(-1); break;
+      case "next": go(1); break;
+      case "jump": jumpTo(parseInt(el.getAttribute("data-idx"), 10)); break;
+      case "reveal": revealCurrent(); break;
+      case "option": {
+        if (!paper) return;
+        if (el.getAttribute("data-locked")) return;
+        var qid = el.getAttribute("data-qid");
+        var q = Q.byId(qid);
+        var letter = el.getAttribute("data-letter");
+        if (q.type === "multi") {
+          var arr = Array.isArray(paper.answers[qid]) ? paper.answers[qid].slice() : [];
+          var at = arr.indexOf(letter);
+          if (at === -1) arr.push(letter); else arr.splice(at, 1);
+          paper.answers[qid] = arr;
+        } else {
+          paper.answers[qid] = letter;
+        }
+        Q.save();
+        /* 即时刷题：单选点选后立刻判定 */
+        if (paper.mode === "practice" || paper.mode === "tag") {
+          if (q.type === "single") {
+            paper.checked[qid] = true;
+            var r = Q.grade(q, paper.answers[qid], paper.amend[qid]);
+            if (r.status === "wrong" || r.status === "partial") { Q.markWrong(qid); Q.save(); }
+          }
+        }
+        render(true);
+        break;
+      }
+      case "fill": break;
+      case "amend":
+        if (!paper) return;
+        paper.amend[paper.qids[paper.index]] = true;
+        Q.save();
+        render(true);
+        break;
+      case "mark": {
+        var idM = el.getAttribute("data-qid") || (paper ? paper.qids[paper.index] : null);
+        if (!idM) return;
+        var added = Q.toggleMark(idM);
+        toast(added ? "已加入收藏" : "已取消收藏");
+        render(true);
+        break;
+      }
+      case "exclude": {
+        var idE = el.getAttribute("data-qid") || (paper ? paper.qids[paper.index] : null);
+        if (!idE) return;
+        var ex = Q.toggleExclude(idE);
+        toast(ex ? "已屏蔽，不再出现在抽题中" : "已取消屏蔽");
+        render(true);
+        break;
+      }
+      case "theme":
+        Q.store.theme = Q.store.theme === "dark" ? "light" : "dark";
+        Q.save();
+        render(true);
+        break;
+      case "toggle-filter-tag": {
+        var tag = el.getAttribute("data-tag");
+        var i = ui.filterTags.indexOf(tag);
+        if (i === -1) ui.filterTags.push(tag); else ui.filterTags.splice(i, 1);
+        render(true);
+        break;
+      }
+      case "toggle-tag": {
+        var tg = el.getAttribute("data-tag");
+        var j = ui.tagSel.indexOf(tg);
+        if (j === -1) ui.tagSel.push(tg); else ui.tagSel.splice(j, 1);
+        render(true);
+        break;
+      }
+      case "quick-tag":
+        ui.tagSel = [el.getAttribute("data-tag")];
+        ui.view = "tagselect";
+        render();
+        break;
+      case "clear-tags": ui.tagSel = []; render(true); break;
+      case "tag-type": ui.tagType = el.getAttribute("data-type"); render(true); break;
+      case "filter-type": ui.filterType = el.getAttribute("data-type"); render(true); break;
+      case "filter-state": ui.filterState = el.getAttribute("data-state"); render(true); break;
+      case "clear-filter":
+        ui.filterTags = []; ui.filterType = "all"; ui.filterState = "all"; ui.search = "";
+        render(true);
+        break;
+      case "clear-wrong":
+        Q.store.wrong = [];
+        Q.save();
+        toast("错题本已清空");
+        render(true);
+        break;
+      default: break;
+    }
+  });
+
+  document.addEventListener("input", function (ev) {
+    var el = ev.target;
+    if (!el) return;
+    if (el.id === "bankSearch") {
+      ui.search = el.value;
+      var scrollY = window.scrollY;
+      viewEl.innerHTML = renderBank();
+      window.scrollTo(0, scrollY);
+      var input = document.getElementById("bankSearch");
+      if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+      return;
+    }
+    if (el.getAttribute && el.getAttribute("data-action") === "fill-input") {
+      var paper = Q.store.paper;
+      if (!paper) return;
+      var qid = el.getAttribute("data-qid");
+      var idx = parseInt(el.getAttribute("data-idx"), 10);
+      if (!Array.isArray(paper.answers[qid])) paper.answers[qid] = [];
+      paper.answers[qid][idx] = el.value;
+      Q.save();
+      var cell = viewEl.querySelector('.card-cell[data-idx="' + paper.index + '"]');
+      if (cell && paper.index === paper.qids.indexOf(qid)) {
+        if (Q.isAnswered(Q.byId(qid), paper.answers[qid])) cell.classList.add("answered");
+      }
+    }
+  });
+
+  document.addEventListener("keydown", function (ev) {
+    if (ui.view !== "quiz") return;
+    var tag = (ev.target && ev.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+    if (ev.key === "ArrowLeft") { ev.preventDefault(); go(-1); }
+    if (ev.key === "ArrowRight") { ev.preventDefault(); go(1); }
+  });
+
+  /* ---------------- 启动 ---------------- */
+
+  applyTheme();
+  render();
+})();
+
+</script>
+</body>
+</html>
