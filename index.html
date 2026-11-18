@@ -1058,8 +1058,8 @@ window.QUIZ_META = {
   title: "入党申请人结业考试刷题",
   subtitle: "天津大学学生党校 · 结业考试复习指导与专题训练（第九十一期版）",
   source: "题库来源：天津大学入党申请人培训结业考试复习指导与专题训练（第九十一期版）中的选择题与填空题",
-  version: "v1.3.1",
-  buildDate: "2026-11-17"
+  version: "v1.5",
+  buildDate: "2026-11-18"
 };
 
 /* ---------- 分类分组：用于标签配色与筛选面板 ---------- */
@@ -1103,6 +1103,27 @@ window.QUIZ_TAGS = [
 
 /* ---------- 更新日志 ---------- */
 window.QUIZ_CHANGELOG = [
+  {
+    version: "v1.5",
+    date: "2026-11-18",
+    title: "切栏目不再刷新卷子",
+    items: [
+      "「模拟试卷」「即时刷题」「错题重练」三个入口改为续做：点进去直接回到上次那份卷子和那道题，作答进度原样保留。",
+      "每种练习模式各存一份卷子，来回切换互不覆盖；只有点卷面上的「重新组卷」才会重新生成一份。",
+      "上次已交卷的卷子再点进去会打开结算页，不会把结果直接冲掉。",
+      "首页模式卡上会标出「上次进度可继续」，方便看出还有没做完的卷子。"
+    ]
+  },
+  {
+    version: "v1.4",
+    date: "2026-11-18",
+    title: "分类练习改为全量题目",
+    items: [
+      "分类练习不再从该分类里随机抽 30 题，改为把这个分类下的题全部刷一遍，只是顺序随机打乱。",
+      "题型筛选同样吃全量：选「多选题 + 土地革命与长征」就是把这段党史的全部多选题都练到。",
+      "不选任何标签时练全库全部题目（98 题），页面上会直接显示本次的题量。"
+    ]
+  },
   {
     version: "v1.3.1",
     date: "2026-11-17",
@@ -2331,7 +2352,8 @@ window.BANK_FILL = [
     excluded: [],
     wrong: [],
     records: [],
-    paper: null
+    paper: null,
+    papers: {}
   };
 
   function load() {
@@ -2349,6 +2371,12 @@ window.BANK_FILL = [
     if (!Array.isArray(state.excluded)) state.excluded = [];
     if (!Array.isArray(state.wrong)) state.wrong = [];
     if (!Array.isArray(state.records)) state.records = [];
+    /* 每种练习模式各留一份卷子，切栏目不互相覆盖 */
+    if (!state.papers || typeof state.papers !== "object") state.papers = {};
+    if (state.paper && state.paper.mode) {
+      if (!state.papers[state.paper.mode]) state.papers[state.paper.mode] = state.paper;
+      state.paper = state.papers[state.paper.mode];
+    }
     return state;
   }
 
@@ -2502,7 +2530,8 @@ window.BANK_FILL = [
         if (!tags.length) return true;
         return (q.tags || []).some(function (t) { return tags.indexOf(t) !== -1; });
       });
-      qids = pick(filtered, Math.min(opts.count || 30, filtered.length));
+      /* 分类练习：该分类下的题全刷一遍，只打乱顺序，不做截断 */
+      qids = pick(filtered, filtered.length);
       var names = tags.map(function (id) { return tagOf(id).name; });
       label = names.length ? ("分类练习 · " + names.join(" / ")) : ("分类练习 · " + tagNameOfType(type));
     } else if (mode === "wrong") {
@@ -2537,6 +2566,7 @@ window.BANK_FILL = [
       review: false,
       filter: { tags: opts.tags || [], type: opts.type || "all" }
     };
+    store.papers[mode] = paper;
     store.paper = paper;
     save();
     return paper;
@@ -2550,8 +2580,24 @@ window.BANK_FILL = [
   }
 
   function clearPaper() {
+    if (store.paper && store.paper.mode) delete store.papers[store.paper.mode];
     store.paper = null;
     save();
+  }
+
+  /* 某个模式下还没交卷的那份卷子，没有则 null */
+  function stashed(mode) {
+    var p = (store.papers || {})[mode];
+    return p && !p.submitted ? p : null;
+  }
+
+  /* 把某个模式的卷子切成当前卷子，作答进度原样保留 */
+  function openPaper(mode) {
+    var p = (store.papers || {})[mode];
+    if (!p) return null;
+    store.paper = p;
+    save();
+    return p;
   }
 
   /* ---------------- 记录 ---------------- */
@@ -2664,6 +2710,8 @@ window.BANK_FILL = [
     grade: gradeQuestion,
     newPaper: newPaper,
     clearPaper: clearPaper,
+    stashed: stashed,
+    openPaper: openPaper,
     summarize: summarize,
     recordResult: recordResult,
     markWrong: markWrong,
@@ -2838,11 +2886,11 @@ window.BANK_FILL = [
         '<p class="section-note">所有练习记录、错题与收藏都保存在本机浏览器</p></div>' +
       '<div class="mode-grid">' +
         modeCard("exam", "模拟试卷", "随机抽 20 道单选、5 道多选、3 道填空，整套答完统一结算，按考试口径判分。",
-          "20 单选 · 5 多选 · 3 填空", "整套 " + (Q.store.paper && !Q.store.paper.submitted ? "进行中" : "可开始")) +
+          "20 单选 · 5 多选 · 3 填空", Q.stashed("exam") ? "上次进度可继续" : "可开始") +
         modeCard("practice", "即时刷题", "随机抽 30 道混合题，答完一题立刻给出判定与解析，适合逐题过一遍。",
-          "30 题 · 即时判定", "可开始") +
-        modeCard("tagselect", "分类练习", "按事件线与考点标签抽题，单选、多选、填空可单独练，也可只练某一段党史。",
-          "按标签 · 最多 30 题", "可开始") +
+          "30 题 · 即时判定", Q.stashed("practice") ? "上次进度可继续" : "可开始") +
+        modeCard("tagselect", "分类练习", "把某个分类下的题全部刷一遍，顺序随机打乱；单选、多选、填空可单独练，也可只练某一段党史。",
+          "按标签 · 全分类题目", "可开始") +
         modeCard("wrong", "错题重练", "从历史错题中去重抽题，答完即时反馈，把反复出错的知识点逐个清掉。",
           wrongCount + " 道错题", wrongCount ? "可开始" : "暂无错题", !wrongCount) +
       '</div>' +
@@ -2947,20 +2995,19 @@ window.BANK_FILL = [
 
     return '' +
       '<div class="section-head"><h2 class="section-title">分类练习</h2>' +
-        '<p class="section-note">先选题型，再选事件线；不选标签则为全库随机</p></div>' +
+        '<p class="section-note">先选题型，再选事件线；不选标签则练全库，顺序随机打乱、不抽题截断</p></div>' +
       '<div class="filter-bar">' +
         '<div class="filter-line"><span class="filter-label">题型</span>' + typeChips + "</div>" +
         '<div class="filter-line"><span class="filter-label">已选</span>' +
           (ui.tagSel.length
             ? ui.tagSel.map(function (id) { return tagHtml(id, true); }).join("")
-            : '<span class="section-note">未选标签 · 全库随机</span>') +
+            : '<span class="section-note">未选标签 · 全库全部题目</span>') +
           (ui.tagSel.length ? '<button type="button" class="btn btn-sm btn-ghost" data-action="clear-tags">清空</button>' : "") +
         "</div>" +
       "</div>" +
       '<div class="tag-groups">' + groups + "</div>" +
       '<div class="start-bar">' +
-        '<div class="start-info">当前可抽 <strong>' + pool + "</strong> 题，将随机抽取 " +
-          Math.min(30, pool) + ' 题</div>' +
+        '<div class="start-info">当前分类共 <strong>' + pool + "</strong> 题，将全部刷一遍（顺序随机打乱）</div>" +
         '<button type="button" class="btn btn-solid" data-action="start-tag"' + (pool ? "" : " disabled") +
           ">开始分类练习</button>" +
       "</div>";
@@ -3427,6 +3474,27 @@ window.BANK_FILL = [
 
   /* ---------------- 动作 ---------------- */
 
+  /* 打开某个练习模式：已有进度就接着上次，只有「重新组卷」才真的换一份 */
+  function enterPaper(mode) {
+    var live = Q.stashed(mode);
+    if (live) {
+      Q.openPaper(mode);
+      ui.view = "quiz";
+      render();
+      toast("已回到上次的「" + live.label + "」，第 " + (live.index + 1) + " / " + live.qids.length + " 题");
+      return;
+    }
+    var done = (Q.store.papers || {})[mode];
+    if (done && done.submitted) {
+      Q.openPaper(mode);
+      ui.view = "result";
+      render();
+      toast("上次这份已交卷，可查看结算，或点「重新组卷」再来一份");
+      return;
+    }
+    startPaper(mode);
+  }
+
   function startPaper(mode) {
     var paper = Q.newPaper(mode);
     if (!paper) { toast("没有可用的题目，请先取消部分屏蔽"); return; }
@@ -3505,9 +3573,9 @@ window.BANK_FILL = [
     }
 
     switch (action) {
-      case "start-exam": startPaper("exam"); break;
-      case "start-practice": startPaper("practice"); break;
-      case "start-wrong": startPaper("wrong"); break;
+      case "start-exam": enterPaper("exam"); break;
+      case "start-practice": enterPaper("practice"); break;
+      case "start-wrong": enterPaper("wrong"); break;
       case "start-tag":
         var p = Q.newPaper("tag", { tags: ui.tagSel, type: ui.tagType });
         if (!p) { toast("该条件下没有题目"); return; }
