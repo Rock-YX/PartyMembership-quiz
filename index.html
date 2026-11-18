@@ -1058,7 +1058,7 @@ window.QUIZ_META = {
   title: "入党申请人结业考试刷题",
   subtitle: "天津大学学生党校 · 结业考试复习指导与专题训练（第九十一期版）",
   source: "题库来源：天津大学入党申请人培训结业考试复习指导与专题训练（第九十一期版）中的选择题与填空题",
-  version: "v1.5",
+  version: "v1.7",
   buildDate: "2026-11-18"
 };
 
@@ -1103,6 +1103,28 @@ window.QUIZ_TAGS = [
 
 /* ---------- 更新日志 ---------- */
 window.QUIZ_CHANGELOG = [
+  {
+    version: "v1.7",
+    date: "2026-11-18",
+    title: "切窗口、重新加载都保住进度",
+    items: [
+      "分类练习改为续做：同标签、同题型的卷子还在，点进去直接回到上次那道题，不再重新组卷。",
+      "页面会记住你上次停在哪个栏目，切到别的窗口再切回来（或整页重新加载）直接回到原来的题，不退回首页。",
+      "在分类页挑的标签与题型也一并记住，重新加载后仍是你选的那几个。",
+      "分类页会提示「上次同条件已做到第 N 题」，按钮变成「继续上次分类练习」。"
+    ]
+  },
+  {
+    version: "v1.6",
+    date: "2026-11-18",
+    title: "选项顺序随机打乱",
+    items: [
+      "模拟试卷与即时刷题组卷时，每道选择题的选项顺序各自打乱，选项字母按新顺序重排为 A、B、C、D，正确答案的字母同步换算。",
+      "打乱结果随卷子一起保存，做了一半切走再回来，看到的还是同一套顺序，判分不受影响。",
+      "答题卡、结算页、整卷回顾、错题写入都按卷面顺序判分，回看时「你的答案」与「正确答案」指向同一套字母。",
+      "分类练习与错题重练保持题库原顺序，便于按标签逐条对照。"
+    ]
+  },
   {
     version: "v1.5",
     date: "2026-11-18",
@@ -2342,6 +2364,9 @@ window.BANK_FILL = [
   var INDEX = {};
   ALL.forEach(function (q) { INDEX[q.id] = q; });
 
+  var ALPHA = "ABCDEFGHIJ";
+  function indexLetter(i) { return ALPHA.charAt(i); }
+
   var LS_KEY = "tddx-quiz-v1";
 
   /* ---------------- 存储 ---------------- */
@@ -2353,7 +2378,10 @@ window.BANK_FILL = [
     wrong: [],
     records: [],
     paper: null,
-    papers: {}
+    papers: {},
+    lastView: "home",
+    tagSel: [],
+    tagType: "all"
   };
 
   function load() {
@@ -2371,6 +2399,9 @@ window.BANK_FILL = [
     if (!Array.isArray(state.excluded)) state.excluded = [];
     if (!Array.isArray(state.wrong)) state.wrong = [];
     if (!Array.isArray(state.records)) state.records = [];
+    if (!Array.isArray(state.tagSel)) state.tagSel = [];
+    if (!state.tagType) state.tagType = "all";
+    if (!state.lastView) state.lastView = "home";
     /* 每种练习模式各留一份卷子，切栏目不互相覆盖 */
     if (!state.papers || typeof state.papers !== "object") state.papers = {};
     if (state.paper && state.paper.mode) {
@@ -2566,6 +2597,30 @@ window.BANK_FILL = [
       review: false,
       filter: { tags: opts.tags || [], type: opts.type || "all" }
     };
+
+    /* 模拟试卷、即时刷题：选项顺序打乱并按新顺序重排字母，正确答案的字母同步换算。
+       选项文字里没有「A项」「选B」这类字母引用，重排不会让解析前后矛盾。 */
+    if (mode === "exam" || mode === "practice") {
+      var shuf = {};
+      qids.forEach(function (id) {
+        var q0 = INDEX[id];
+        if (!q0 || (q0.type !== "single" && q0.type !== "multi")) return;
+        var n = (q0.options || []).length;
+        if (n < 2) return;
+        var idxs = [];
+        for (var i = 0; i < n; i++) idxs.push(i);
+        idxs = shuffle(idxs);
+        var swap = {};
+        idxs.forEach(function (oldIdx, nowIdx) { swap[indexLetter(oldIdx)] = indexLetter(nowIdx); });
+        var key = q0.answer.split("").map(function (L) { return swap[L]; })
+          .filter(function (L) { return !!L; }).sort().join("");
+        shuf[id] = { options: idxs.map(function (i) { return q0.options[i]; }), answer: key };
+      });
+      paper.shuf = shuf;
+    } else {
+      paper.shuf = {};
+    }
+
     store.papers[mode] = paper;
     store.paper = paper;
     save();
@@ -2598,6 +2653,19 @@ window.BANK_FILL = [
     store.paper = p;
     save();
     return p;
+  }
+
+  /* 卷面上真正呈现的题目：选项可能已重排，答案字母也随之换算 */
+  function viewQ(paper, id) {
+    var q = INDEX[id];
+    if (!q || !paper || !paper.shuf) return q;
+    var s = paper.shuf[id];
+    if (!s) return q;
+    var o = {};
+    Object.keys(q).forEach(function (k) { o[k] = q[k]; });
+    o.options = s.options;
+    o.answer = s.answer;
+    return o;
   }
 
   /* ---------------- 记录 ---------------- */
@@ -2712,6 +2780,7 @@ window.BANK_FILL = [
     clearPaper: clearPaper,
     stashed: stashed,
     openPaper: openPaper,
+    viewQ: viewQ,
     summarize: summarize,
     recordResult: recordResult,
     markWrong: markWrong,
@@ -2743,14 +2812,22 @@ window.BANK_FILL = [
 
   var LETTERS = "ABCDEFGH";
   var ui = {
-    view: "home",
+    /* 重新加载/切回窗口后回到上次所在的页面 */
+    view: (Q.store.lastView || "home"),
     search: "",
     filterTags: [],
     filterType: "all",
     filterState: "all",
-    tagSel: [],
-    tagType: "all"
+    tagSel: (Array.isArray(Q.store.tagSel) ? Q.store.tagSel.slice() : []),
+    tagType: (Q.store.tagType || "all")
   };
+
+  /* 分类页的选择也记到本地，重新加载后仍是你挑的那几个标签 */
+  function rememberTagFilters() {
+    Q.store.tagSel = ui.tagSel.slice();
+    Q.store.tagType = ui.tagType;
+    Q.save();
+  }
 
   /* ---------------- 基础工具 ---------------- */
 
@@ -2978,6 +3055,10 @@ window.BANK_FILL = [
     }).join("");
 
     var pool = QQUI_pool(ui.tagSel, ui.tagType);
+    var live = Q.stashed("tag");
+    var canResume = !!live &&
+      (live.filter.type || "all") === (ui.tagType || "all") &&
+      (live.filter.tags || []).slice().sort().join("|") === ui.tagSel.slice().sort().join("|");
 
     var groups = Q.groups.map(function (g) {
       var tags = Q.tags.filter(function (t) { return t.group === g.id; });
@@ -3007,9 +3088,13 @@ window.BANK_FILL = [
       "</div>" +
       '<div class="tag-groups">' + groups + "</div>" +
       '<div class="start-bar">' +
-        '<div class="start-info">当前分类共 <strong>' + pool + "</strong> 题，将全部刷一遍（顺序随机打乱）</div>" +
-        '<button type="button" class="btn btn-solid" data-action="start-tag"' + (pool ? "" : " disabled") +
-          ">开始分类练习</button>" +
+        (canResume
+          ? '<div class="start-info">上次同条件的分类练习已做到第 <strong>' + (live.index + 1) +
+            "</strong> 题，点右侧继续接着刷</div>" +
+            '<button type="button" class="btn btn-solid" data-action="start-tag">继续上次分类练习</button>'
+          : '<div class="start-info">当前分类共 <strong>' + pool + "</strong> 题，将全部刷一遍（顺序随机打乱）</div>" +
+            '<button type="button" class="btn btn-solid" data-action="start-tag"' + (pool ? "" : " disabled") +
+            ">开始分类练习</button>") +
       "</div>";
   }
 
@@ -3030,7 +3115,7 @@ window.BANK_FILL = [
     var idx = Math.min(paper.index, paper.qids.length - 1);
     paper.index = idx;
     var qid = paper.qids[idx];
-    var q = Q.byId(qid);
+    var q = Q.viewQ(paper, qid);
     var ans = paper.answers[qid];
     var revealed = paper.submitted || paper.review || !!paper.checked[qid];
     var res = Q.grade(q, ans, paper.amend[qid]);
@@ -3145,7 +3230,7 @@ window.BANK_FILL = [
     }).length;
 
     var cells = paper.qids.map(function (id, i) {
-      var q = Q.byId(id);
+      var q = Q.viewQ(paper, id);
       var st = "unanswered";
       var cls = "card-cell";
       /* 只按「这一题自己」是否看过答案上色，不能借用当前页的判定状态，
@@ -3216,7 +3301,7 @@ window.BANK_FILL = [
       }).join("") + "</div>";
 
     var wrongItems = paper.qids.filter(function (id) {
-      var r = Q.grade(Q.byId(id), paper.answers[id], paper.amend[id]);
+      var r = Q.grade(Q.viewQ(paper, id), paper.answers[id], paper.amend[id]);
       return r.status !== "correct";
     });
 
@@ -3224,7 +3309,7 @@ window.BANK_FILL = [
       '<div class="section-head"><h2 class="section-title">需要回看的题</h2>' +
         '<p class="section-note">共 ' + wrongItems.length + " 道</p></div>" +
       '<div class="review-list">' + wrongItems.map(function (id) {
-        var q = Q.byId(id);
+        var q = Q.viewQ(paper, id);
         var r = Q.grade(q, paper.answers[id], paper.amend[id]);
         var your = q.type === "fill"
           ? (Array.isArray(paper.answers[id]) ? paper.answers[id].join(" / ") : "")
@@ -3447,6 +3532,8 @@ window.BANK_FILL = [
     var paper = Q.store.paper;
     if (ui.view === "quiz" && !paper) ui.view = "home";
     if (ui.view === "result" && (!paper || !paper.submitted)) ui.view = "home";
+    /* 记住当前页面，切窗口或重新加载后回到同一处 */
+    if (Q.store.lastView !== ui.view) { Q.store.lastView = ui.view; Q.save(); }
 
     var html = "";
     switch (ui.view) {
@@ -3515,7 +3602,7 @@ window.BANK_FILL = [
     paper.review = false;
     /* 答错的题写入错题本 */
     paper.qids.forEach(function (id) {
-      var q = Q.byId(id);
+      var q = Q.viewQ(paper, id);
       var r = Q.grade(q, paper.answers[id], paper.amend[id]);
       if (r.status === "wrong" || r.status === "partial") Q.markWrong(id);
     });
@@ -3531,7 +3618,7 @@ window.BANK_FILL = [
     if (!paper) return;
     var qid = paper.qids[paper.index];
     paper.checked[qid] = true;
-    var r = Q.grade(Q.byId(qid), paper.answers[qid], paper.amend[qid]);
+    var r = Q.grade(Q.viewQ(paper, qid), paper.answers[qid], paper.amend[qid]);
     if (r.status === "wrong" || r.status === "partial") {
       Q.markWrong(qid);
       Q.save();
@@ -3576,13 +3663,20 @@ window.BANK_FILL = [
       case "start-exam": enterPaper("exam"); break;
       case "start-practice": enterPaper("practice"); break;
       case "start-wrong": enterPaper("wrong"); break;
-      case "start-tag":
-        var p = Q.newPaper("tag", { tags: ui.tagSel, type: ui.tagType });
+      case "start-tag": {
+        var liveTag = Q.stashed("tag");
+        var sameFilter = !!liveTag &&
+          (liveTag.filter.type || "all") === (ui.tagType || "all") &&
+          (liveTag.filter.tags || []).slice().sort().join("|") === ui.tagSel.slice().sort().join("|");
+        var p = sameFilter ? Q.openPaper("tag") : Q.newPaper("tag", { tags: ui.tagSel, type: ui.tagType });
         if (!p) { toast("该条件下没有题目"); return; }
         ui.view = "quiz";
         render();
-        toast("已生成分类练习 " + p.qids.length + " 题");
+        toast(sameFilter
+          ? "已回到上次分类练习，第 " + (p.index + 1) + " / " + p.qids.length + " 题"
+          : "已生成分类练习 " + p.qids.length + " 题");
         break;
+      }
       case "submit": submitPaper(); break;
       case "new-paper":
         if (paper) startPaper(paper.mode === "tag" ? "tag" : paper.mode);
@@ -3609,7 +3703,7 @@ window.BANK_FILL = [
         if (!paper) return;
         if (el.getAttribute("data-locked")) return;
         var qid = el.getAttribute("data-qid");
-        var q = Q.byId(qid);
+        var q = Q.viewQ(paper, qid);
         var letter = el.getAttribute("data-letter");
         if (q.type === "multi") {
           var arr = Array.isArray(paper.answers[qid]) ? paper.answers[qid].slice() : [];
@@ -3670,16 +3764,18 @@ window.BANK_FILL = [
         var tg = el.getAttribute("data-tag");
         var j = ui.tagSel.indexOf(tg);
         if (j === -1) ui.tagSel.push(tg); else ui.tagSel.splice(j, 1);
+        rememberTagFilters();
         render(true);
         break;
       }
       case "quick-tag":
         ui.tagSel = [el.getAttribute("data-tag")];
+        rememberTagFilters();
         ui.view = "tagselect";
         render();
         break;
-      case "clear-tags": ui.tagSel = []; render(true); break;
-      case "tag-type": ui.tagType = el.getAttribute("data-type"); render(true); break;
+      case "clear-tags": ui.tagSel = []; rememberTagFilters(); render(true); break;
+      case "tag-type": ui.tagType = el.getAttribute("data-type"); rememberTagFilters(); render(true); break;
       case "filter-type": ui.filterType = el.getAttribute("data-type"); render(true); break;
       case "filter-state": ui.filterState = el.getAttribute("data-state"); render(true); break;
       case "clear-filter":
