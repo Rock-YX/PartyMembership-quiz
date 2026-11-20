@@ -1058,8 +1058,8 @@ window.QUIZ_META = {
   title: "入党申请人结业考试刷题",
   subtitle: "天津大学学生党校 · 结业考试复习指导与专题训练（第九十一期版）",
   source: "题库来源：天津大学入党申请人培训结业考试复习指导与专题训练（第九十一期版）中的选择题与填空题",
-  version: "v1.7",
-  buildDate: "2026-11-18"
+  version: "v1.8",
+  buildDate: "2026-11-20"
 };
 
 /* ---------- 分类分组：用于标签配色与筛选面板 ---------- */
@@ -1103,6 +1103,15 @@ window.QUIZ_TAGS = [
 
 /* ---------- 更新日志 ---------- */
 window.QUIZ_CHANGELOG = [
+  {
+    version: "v1.8",
+    date: "2026-11-20",
+    title: "修复模拟卷汇总判分错配",
+    items: [
+      "修复结算页汇总分数仍按题库原题判分的问题：选项打乱后答案字母已重排，汇总改用卷面上的题目判分，答对题数、得分与正确率不再被误算成答错。",
+      "历史错题写入、考点得分分布同样按卷面判定，与答题卡颜色一致。"
+    ]
+  },
   {
     version: "v1.7",
     date: "2026-11-18",
@@ -2703,7 +2712,8 @@ window.BANK_FILL = [
     var total = 0, max = 0, correct = 0, wrong = 0, partial = 0, blank = 0;
     var tagAgg = {};
     paper.qids.forEach(function (id) {
-      var q = INDEX[id];
+      /* 汇总判分必须用卷面上的题目：选项打乱后答案字母已重排，用题库原题会对错答案 */
+      var q = viewQ(paper, id);
       var r = gradeQuestion(q, paper.answers[id], paper.amend[id]);
       total += r.score;
       max += r.max;
